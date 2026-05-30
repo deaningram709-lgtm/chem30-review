@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chemistry 30 Data Booklet</title>
+<style>
+  :root {
+    --primary: #1a3a5c;
+    --accent: #2e7db5;
+    --accent2: #e8f4fd;
+    --green: #1a6e3c;
+    --green-light: #e8f5ee;
+    --orange: #b55a00;
+    --orange-light: #fff3e0;
+    --purple: #5a1a6e;
+    --purple-light: #f3e8ff;
+    --red: #8b1a1a;
+    --red-light: #fde8e8;
+    --teal: #006666;
+    --teal-light: #e0f5f5;
+    --gold: #7a6000;
+    --gold-light: #fffbe0;
+    --bg: #f4f6fa;
+    --card: #ffffff;
+    --text: #1a1a2e;
+    --muted: #555570;
+    --border: #d0d8e8;
+    --header-h: 64px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); font-size: 15px; }
+
+  /* ── Header ── */
+  #site-header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: var(--primary); color: #fff;
+    height: var(--header-h); display: flex; align-items: center;
+    padding: 0 24px; gap: 16px; box-shadow: 0 2px 8px rgba(0,0,0,.3);
+  }
+  #site-header h1 { font-size: 1.2rem; font-weight: 700; white-space: nowrap; }
+  #search-box {
+    flex: 1; max-width: 340px; padding: 7px 14px;
+    border-radius: 20px; border: none; font-size: 14px;
+    background: rgba(255,255,255,.15); color: #fff; outline: none;
+  }
+  #search-box::placeholder { color: rgba(255,255,255,.6); }
+  #search-box:focus { background: rgba(255,255,255,.25); }
+
+  /* ── Nav ── */
+  #top-nav {
+    position: fixed; top: var(--header-h); left: 0; right: 0; z-index: 99;
+    background: #fff; border-bottom: 2px solid var(--border);
+    display: flex; overflow-x: auto; gap: 2px; padding: 6px 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,.07);
+  }
+  #top-nav::-webkit-scrollbar { height: 4px; }
+  #top-nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .nav-btn {
+    flex-shrink: 0; padding: 6px 14px; border-radius: 16px;
+    border: 1.5px solid transparent; cursor: pointer; font-size: 13px;
+    font-weight: 600; background: var(--bg); color: var(--primary);
+    transition: all .15s; white-space: nowrap;
+  }
+  .nav-btn:hover { background: var(--accent2); border-color: var(--accent); }
+  .nav-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  /* ── Main ── */
+  #main { margin-top: calc(var(--header-h) + 52px); padding: 20px 16px 60px; max-width: 1100px; margin-left: auto; margin-right: auto; }
+
+  /* ── Sections ── */
+  .section { margin-bottom: 14px; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+  .section-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 20px; cursor: pointer; user-select: none;
+    font-size: 1rem; font-weight: 700; letter-spacing: .02em;
+    transition: filter .15s;
+  }
+  .section-header:hover { filter: brightness(.95); }
+  .section-header .arrow { font-size: 1.1rem; transition: transform .25s; }
+  .section-header.open .arrow { transform: rotate(180deg); }
+  .section-body { background: var(--card); display: none; padding: 20px; }
+  .section-body.open { display: block; }
+
+  /* colour themes per section */
+  .theme-blue .section-header   { background: var(--accent);   color: #fff; }
+  .theme-green .section-header  { background: var(--green);    color: #fff; }
+  .theme-orange .section-header { background: var(--orange);   color: #fff; }
+  .theme-purple .section-header { background: var(--purple);   color: #fff; }
+  .theme-red .section-header    { background: var(--red);      color: #fff; }
+  .theme-teal .section-header   { background: var(--teal);     color: #fff; }
+  .theme-gold .section-header   { background: var(--gold);     color: #fff; }
+
+  /* ── Tables ── */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 8px; }
+  th { background: var(--primary); color: #fff; padding: 9px 12px; text-align: left; font-size: 13px; }
+  td { padding: 7px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #f8faff; }
+  tr:hover td { background: var(--accent2); }
+  .num { text-align: right; font-family: 'Courier New', monospace; }
+
+  /* ── Periodic Table ── */
+  #pt-wrap { overflow-x: auto; }
+  .pt-grid { display: grid; grid-template-columns: repeat(18, 56px); gap: 2px; min-width: 1020px; }
+  .pt-cell {
+    border-radius: 5px; padding: 3px 4px; font-size: 10px; line-height: 1.2;
+    border: 1px solid #ccc; cursor: default; min-height: 52px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    transition: transform .1s, box-shadow .1s;
+  }
+  .pt-cell:hover { transform: scale(1.12); box-shadow: 0 4px 12px rgba(0,0,0,.25); z-index: 10; position: relative; }
+  .pt-cell .sym  { font-size: 16px; font-weight: 800; text-align: center; line-height: 1; }
+  .pt-cell .name { font-size: 8px; text-align: center; color: #444; }
+  .pt-cell .anum { font-size: 9px; font-weight: 700; }
+  .pt-cell .mass { font-size: 9px; }
+  .pt-cell .ion  { font-size: 8px; color: #555; }
+  .pt-cell .en   { font-size: 8px; color: #333; }
+  .pt-empty { background: transparent; border: none; }
+
+  /* element type colours */
+  .alkali    { background: #ffe0e0; }
+  .alkaline  { background: #ffecc0; }
+  .transition{ background: #e0f0ff; }
+  .post-tm   { background: #d8ead8; }
+  .metalloid { background: #ffe8b0; }
+  .nonmetal  { background: #d0eed0; }
+  .halogen   { background: #e8d8f0; }
+  .noble     { background: #d0e8f8; }
+  .lanthanide{ background: #f0d8e0; }
+  .actinide  { background: #f0e8d0; }
+  .hydrogen-cell { background: #f8f8d8; }
+
+  /* legend */
+  .pt-legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 12px; }
+  .legend-box { width: 16px; height: 16px; border-radius: 3px; border: 1px solid #aaa; }
+
+  /* ── Polyatomic ions grid ── */
+  .ion-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 6px; }
+  .ion-card { background: var(--accent2); border: 1px solid var(--border); border-radius: 7px; padding: 8px 12px; font-size: 13px; }
+  .ion-card .ion-name { font-weight: 600; color: var(--primary); }
+  .ion-card .ion-formula { font-family: monospace; color: var(--red); font-size: 14px; }
+
+  /* ── Notation grid ── */
+  .notation-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px; }
+  .notation-card { background: var(--green-light); border: 1px solid #b8dfc8; border-radius: 8px; padding: 10px 14px; }
+  .notation-card .sym { font-size: 1.3rem; font-weight: 800; color: var(--green); font-family: 'Times New Roman', serif; }
+  .notation-card .term { font-weight: 600; margin: 2px 0; }
+  .notation-card .unit { font-size: 12px; color: var(--muted); }
+
+  /* ── Constants ── */
+  .const-card { background: var(--gold-light); border: 1.5px solid #d4c060; border-radius: 8px; padding: 14px 18px; margin-bottom: 10px; }
+  .const-card h4 { font-size: .9rem; font-weight: 700; color: var(--gold); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+  .const-val { font-size: 1.05rem; font-family: 'Courier New', monospace; color: var(--text); }
+
+  /* ── Electrode ── */
+  .electrode-row-pos td { color: #1a6e3c; }
+  .electrode-row-neg td { color: #8b1a1a; }
+  .electrode-row-zero td { color: #333; font-weight: 700; background: #fffce0 !important; }
+
+  /* ── Solubility ── */
+  .sol-s { color: #1a6e3c; font-weight: 700; }  /* soluble */
+  .sol-i { color: #8b1a1a; }                     /* insoluble / partial */
+
+  /* ── Flame colours ── */
+  .flame-swatch { display: inline-block; width: 20px; height: 20px; border-radius: 4px; border: 1px solid #aaa; vertical-align: middle; margin-right: 6px; }
+
+  /* ── Acid colour badges ── */
+  .colour-badge { display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 12px; font-weight: 600; color: #fff; }
+
+  /* ── Highlights / search ── */
+  mark { background: #ffe066; border-radius: 2px; padding: 0 2px; }
+
+  /* sub/sup */
+  sub, sup { font-size: 75%; line-height: 0; position: relative; vertical-align: baseline; }
+  sup { top: -0.4em; } sub { bottom: -0.2em; }
+
+  /* Utility */
+  .info-note { background: #e8f4fd; border-left: 4px solid var(--accent); padding: 10px 14px; border-radius: 0 6px 6px 0; font-size: 13px; margin: 10px 0; color: var(--muted); }
+  .subsection-title { font-size: .95rem; font-weight: 700; color: var(--primary); margin: 16px 0 8px; border-bottom: 2px solid var(--border); padding-bottom: 4px; }
+  .pill { display: inline-block; background: var(--primary); color: #fff; border-radius: 10px; font-size: 11px; padding: 1px 8px; margin-right: 4px; }
+
+  @media (max-width: 600px) {
+    #site-header h1 { font-size: 1rem; }
+    #main { padding: 12px 8px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<header id="site-header">
+  <h1>⚗️ Chemistry 30 Data Booklet</h1>
+  <input id="search-box" type="search" placeholder="Search formulas, names, values…" oninput="doSearch(this.value)">
+</header>
+
+<nav id="top-nav">
+  <button class="nav-btn active" onclick="navTo('s-pt',this)">Periodic Table</button>
+  <button class="nav-btn" onclick="navTo('s-ions',this)">Polyatomic Ions</button>
+  <button class="nav-btn" onclick="navTo('s-notation',this)">Notation</button>
+  <button class="nav-btn" onclick="navTo('s-constants',this)">Constants</button>
+  <button class="nav-btn" onclick="navTo('s-enthalpy',this)">Enthalpies ΔH°f</button>
+  <button class="nav-btn" onclick="navTo('s-solubility',this)">Solubility</button>
+  <button class="nav-btn" onclick="navTo('s-flame',this)">Flame Colours</button>
+  <button class="nav-btn" onclick="navTo('s-electrode',this)">Electrode Potentials</button>
+  <button class="nav-btn" onclick="navTo('s-acids',this)">Acids &amp; Bases K<sub>a</sub></button>
+  <button class="nav-btn" onclick="navTo('s-indicators',this)">Indicators</button>
+  <button class="nav-btn" onclick="navTo('s-aqcolours',this)">Aqueous Ion Colours</button>
+</nav>
+
+<main id="main">
+
+<!-- ═══════════════════════════════════════════════════════ PERIODIC TABLE -->
+<div class="section theme-blue" id="s-pt">
+  <div class="section-header open" onclick="toggle(this)">
+    🔬 Periodic Table of Elements <span class="arrow">▲</span>
+  </div>
+  <div class="section-body open">
+    <div class="pt-legend">
+      <div class="legend-item"><div class="legend-box hydrogen-cell"></div> Hydrogen</div>
+      <div class="legend-item"><div class="legend-box alkali"></div> Alkali Metals</div>
+      <div class="legend-item"><div class="legend-box alkaline"></div> Alkaline Earth</div>
+      <div class="legend-item"><div class="legend-box transition"></div> Transition Metals</div>
+      <div class="legend-item"><div class="legend-box post-tm"></div> Post-Transition</div>
+      <div class="legend-item"><div class="legend-box metalloid"></div> Metalloids</div>
+      <div class="legend-item"><div class="legend-box nonmetal"></div> Non-metals</div>
+      <div class="legend-item"><div class="legend-box halogen"></div> Halogens</div>
+      <div class="legend-item"><div class="legend-box noble"></div> Noble Gases</div>
+      <div class="legend-item"><div class="legend-box lanthanide"></div> Lanthanides</div>
+      <div class="legend-item"><div class="legend-box actinide"></div> Actinides</div>
+    </div>
+    <div class="info-note">Hover over any element for details. Each cell shows: atomic number · mass · common ion · electronegativity · symbol · name.</div>
+    <div id="pt-wrap"><div class="pt-grid" id="pt-grid"></div></div>
+    <p style="font-size:12px;color:var(--muted);margin-top:8px;">* Pb molar mass is less precise due to variable isotopic mix in naturally occurring lead. ( ) = mass of most stable isotope.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ POLYATOMIC IONS -->
+<div class="section theme-green" id="s-ions">
+  <div class="section-header" onclick="toggle(this)">
+    ⚛️ Common Polyatomic Ions <span class="arrow">▼</span>
+  </div>
+  <div class="section-body">
+    <div class="ion-grid">
+      <div class="ion-card"><div class="ion-name">acetate (ethanoate)</div><div class="ion-formula">CH<sub>3</sub>COO<sup>−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">ammonium</div><div class="ion-formula">NH<sub>4</sub><sup>+</sup></div></div>
+      <div class="ion-card"><div class="ion-name">benzoate</div><div class="ion-formula">C<sub>6</sub>H<sub>5</sub>COO<sup>−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">borate</div><div class="ion-formula">BO<sub>3</sub><sup>3−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">carbide</div><div class="ion-formula">C<sub>2</sub><sup>2−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">carbonate</div><div class="ion-formula">CO<sub>3</sub><sup>2−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">hydrogen carbonate</div><div class="ion-formula">HCO<sub>3</sub><sup>−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">chlorate</div><div class="ion-formula">ClO<sub>3</sub><sup>−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">chlorite</div><div class="ion-formula">ClO<sub>2</sub><sup>−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">hypochlorite</div><div class="ion-formula">OCl<sup>−</sup> or ClO<sup>−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">perchlorate</div><div class="ion-formula">ClO<sub>4</sub><sup>−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">chromate</div><div class="ion-formula">CrO<sub>4</sub><sup>2−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">dichromate</div><div class="ion-formula">Cr<sub>2</sub>O<sub>7</sub><sup>2−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">cyanide</div><div class="ion-formula">CN<sup>−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">hydroxide</div><div class="ion-formula">OH<sup>−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">iodate</div><div class="ion-formula">IO<sub>3</sub><sup>−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">nitrate</div><div class="ion-formula">NO<sub>3</sub><sup>−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">nitrite</div><div class="ion-formula">NO<sub>2</sub><sup>−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">oxalate</div><div class="ion-formula">OOCCOO<sup>2−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">hydrogen oxalate</div><div class="ion-formula">HOOCCOO<sup>−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">permanganate</div><div class="ion-formula">MnO<sub>4</sub><sup>−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">peroxide</div><div class="ion-formula">O<sub>2</sub><sup>2−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">persulfide</div><div class="ion-formula">S<sub>2</sub><sup>2−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">phosphate</div><div class="ion-formula">PO<sub>4</sub><sup>3−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">hydrogen phosphate</div><div class="ion-formula">HPO<sub>4</sub><sup>2−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">dihydrogen phosphate</div><div class="ion-formula">H<sub>2</sub>PO<sub>4</sub><sup>−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">silicate</div><div class="ion-formula">SiO<sub>3</sub><sup>2−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">sulfate</div><div class="ion-formula">SO<sub>4</sub><sup>2−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">hydrogen sulfate</div><div class="ion-formula">HSO<sub>4</sub><sup>−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">sulfite</div><div class="ion-formula">SO<sub>3</sub><sup>2−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">hydrogen sulfite</div><div class="ion-formula">HSO<sub>3</sub><sup>−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">hydrogen sulfide</div><div class="ion-formula">HS<sup>−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">thiocyanate</div><div class="ion-formula">SCN<sup>−</sup></div></div>
+      <div class="ion-card"><div class="ion-name">thiosulfate</div><div class="ion-formula">S<sub>2</sub>O<sub>3</sub><sup>2−</sup></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ NOTATION -->
+<div class="section theme-teal" id="s-notation">
+  <div class="section-header" onclick="toggle(this)">
+    📐 Chemistry Notation &amp; Symbols <span class="arrow">▼</span>
+  </div>
+  <div class="section-body">
+    <div class="subsection-title">Variables &amp; Units</div>
+    <div class="notation-grid">
+      <div class="notation-card"><div class="sym">c</div><div class="term">specific heat capacity</div><div class="unit">J/(g·°C) or J/(g·K)</div></div>
+      <div class="notation-card"><div class="sym">E°</div><div class="term">standard electrical potential</div><div class="unit">V or J/C</div></div>
+      <div class="notation-card"><div class="sym">E<sub>k</sub></div><div class="term">kinetic energy</div><div class="unit">kJ</div></div>
+      <div class="notation-card"><div class="sym">E<sub>p</sub></div><div class="term">potential energy</div><div class="unit">kJ</div></div>
+      <div class="notation-card"><div class="sym">ΔH</div><div class="term">enthalpy (heat)</div><div class="unit">kJ</div></div>
+      <div class="notation-card"><div class="sym">ΔH°<sub>f</sub></div><div class="term">standard molar enthalpy of formation</div><div class="unit">kJ/mol</div></div>
+      <div class="notation-card"><div class="sym">I</div><div class="term">current</div><div class="unit">A or C/s</div></div>
+      <div class="notation-card"><div class="sym">K<sub>c</sub></div><div class="term">equilibrium constant</div><div class="unit">—</div></div>
+      <div class="notation-card"><div class="sym">K<sub>a</sub></div><div class="term">acid ionization (dissociation) constant</div><div class="unit">—</div></div>
+      <div class="notation-card"><div class="sym">K<sub>b</sub></div><div class="term">base ionization (dissociation) constant</div><div class="unit">—</div></div>
+      <div class="notation-card"><div class="sym">M</div><div class="term">molar mass</div><div class="unit">g/mol</div></div>
+      <div class="notation-card"><div class="sym">m</div><div class="term">mass</div><div class="unit">g</div></div>
+      <div class="notation-card"><div class="sym">n</div><div class="term">amount of substance</div><div class="unit">mol</div></div>
+      <div class="notation-card"><div class="sym">P</div><div class="term">pressure</div><div class="unit">kPa</div></div>
+      <div class="notation-card"><div class="sym">Q</div><div class="term">charge</div><div class="unit">C</div></div>
+      <div class="notation-card"><div class="sym">T</div><div class="term">temperature (absolute)</div><div class="unit">K</div></div>
+      <div class="notation-card"><div class="sym">t</div><div class="term">temperature (Celsius)</div><div class="unit">°C</div></div>
+      <div class="notation-card"><div class="sym">t</div><div class="term">time</div><div class="unit">s</div></div>
+      <div class="notation-card"><div class="sym">V</div><div class="term">volume</div><div class="unit">L</div></div>
+      <div class="notation-card"><div class="sym">c</div><div class="term">amount concentration</div><div class="unit">mol/L</div></div>
+    </div>
+    <div class="subsection-title" style="margin-top:20px;">Special Symbols</div>
+    <div class="notation-grid">
+      <div class="notation-card"><div class="sym">Δ</div><div class="term">delta — change in a quantity</div></div>
+      <div class="notation-card"><div class="sym">°</div><div class="term">standard conditions</div></div>
+      <div class="notation-card"><div class="sym">[ ]</div><div class="term">amount concentration (mol/L)</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ CONSTANTS -->
+<div class="section theme-gold" id="s-constants">
+  <div class="section-header" onclick="toggle(this)">
+    🔢 Constants, Formulas &amp; SI Prefixes <span class="arrow">▼</span>
+  </div>
+  <div class="section-body">
+    <div class="const-card">
+      <h4>Temperature Conversion</h4>
+      <div class="const-val">25.00 °C = 298.15 K</div>
+    </div>
+    <div class="const-card">
+      <h4>Water Autoionization Constant (K<sub>w</sub>)</h4>
+      <div class="const-val">K<sub>w</sub> = 1.0 × 10<sup>−14</sup> at 298.15 K</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px;">(for ion concentrations in mol/L)</div>
+    </div>
+    <div class="const-card">
+      <h4>Faraday Constant</h4>
+      <div class="const-val">F = 9.65 × 10<sup>4</sup> C/mol e<sup>−</sup></div>
+    </div>
+    <div class="const-card">
+      <h4>Quadratic Formula</h4>
+      <div class="const-val" style="font-size:1.15rem;">x = (−b ± √(b² − 4ac)) / 2a</div>
+    </div>
+
+    <div class="subsection-title">Specific Heat Capacities at 298.15 K, 100.000 kPa</div>
+    <table>
+      <thead><tr><th>Substance</th><th>c (J/g·°C)</th></tr></thead>
+      <tbody>
+        <tr><td>Air</td><td class="num">1.01</td></tr>
+        <tr><td>Polystyrene foam cup</td><td class="num">1.01</td></tr>
+        <tr><td>Water</td><td class="num">4.19</td></tr>
+        <tr><td>Aluminium</td><td class="num">0.897</td></tr>
+        <tr><td>Copper</td><td class="num">0.385</td></tr>
+        <tr><td>Iron</td><td class="num">0.449</td></tr>
+        <tr><td>Tin</td><td class="num">0.227</td></tr>
+      </tbody>
+    </table>
+
+    <div class="subsection-title" style="margin-top:20px;">Selected SI Prefixes</div>
+    <table>
+      <thead><tr><th>Prefix</th><th>Symbol</th><th>Value</th><th>Exponential</th></tr></thead>
+      <tbody>
+        <tr><td>tera</td><td>T</td><td>1 000 000 000 000</td><td class="num">10<sup>12</sup></td></tr>
+        <tr><td>giga</td><td>G</td><td>1 000 000 000</td><td class="num">10<sup>9</sup></td></tr>
+        <tr><td>mega</td><td>M</td><td>1 000 000</td><td class="num">10<sup>6</sup></td></tr>
+        <tr><td>kilo</td><td>k</td><td>1 000</td><td class="num">10<sup>3</sup></td></tr>
+        <tr><td>milli</td><td>m</td><td>0.001</td><td class="num">10<sup>−3</sup></td></tr>
+        <tr><td>micro</td><td>µ</td><td>0.000 001</td><td class="num">10<sup>−6</sup></td></tr>
+        <tr><td>nano</td><td>n</td><td>0.000 000 001</td><td class="num">10<sup>−9</sup></td></tr>
+        <tr><td>pico</td><td>p</td><td>0.000 000 000 001</td><td class="num">10<sup>−12</sup></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ ENTHALPIES -->
+<div class="section theme-orange" id="s-enthalpy">
+  <div class="section-header" onclick="toggle(this)">
+    🌡️ Standard Molar Enthalpies of Formation (ΔH°<sub>f</sub>) at 298.15 K <span class="arrow">▼</span>
+  </div>
+  <div class="section-body">
+    <div class="info-note">All values in kJ/mol. Negative = exothermic formation; positive = endothermic formation.</div>
+    <input type="search" placeholder="Filter by name or formula…" oninput="filterTable('enthalpy-table', this.value)" style="margin-bottom:10px;padding:6px 12px;border-radius:16px;border:1.5px solid var(--border);width:100%;max-width:320px;font-size:14px;">
+    <table id="enthalpy-table">
+      <thead><tr><th>Name</th><th>Formula</th><th style="text-align:right;">ΔH°<sub>f</sub> (kJ/mol)</th></tr></thead>
+      <tbody>
+        <tr><td>aluminium oxide</td><td>Al<sub>2</sub>O<sub>3</sub>(s)</td><td class="num">−1675.7</td></tr>
+        <tr><td>ammonia</td><td>NH<sub>3</sub>(g)</td><td class="num">−45.9</td></tr>
+        <tr><td>ammonium chloride</td><td>NH<sub>4</sub>Cl(s)</td><td class="num">−314.4</td></tr>
+        <tr><td>ammonium nitrate</td><td>NH<sub>4</sub>NO<sub>3</sub>(s)</td><td class="num">−365.6</td></tr>
+        <tr><td>barium carbonate</td><td>BaCO<sub>3</sub>(s)</td><td class="num">−1213.0</td></tr>
+        <tr><td>barium chloride</td><td>BaCl<sub>2</sub>(s)</td><td class="num">−855.0</td></tr>
+        <tr><td>barium hydroxide</td><td>Ba(OH)<sub>2</sub>(s)</td><td class="num">−944.7</td></tr>
+        <tr><td>barium oxide</td><td>BaO(s)</td><td class="num">−548.0</td></tr>
+        <tr><td>barium sulfate</td><td>BaSO<sub>4</sub>(s)</td><td class="num">−1473.2</td></tr>
+        <tr><td>benzene</td><td>C<sub>6</sub>H<sub>6</sub>(l)</td><td class="num">+49.1</td></tr>
+        <tr><td>butane</td><td>C<sub>4</sub>H<sub>10</sub>(g)</td><td class="num">−125.7</td></tr>
+        <tr><td>calcium carbonate</td><td>CaCO<sub>3</sub>(s)</td><td class="num">−1207.6</td></tr>
+        <tr><td>calcium chloride</td><td>CaCl<sub>2</sub>(s)</td><td class="num">−795.4</td></tr>
+        <tr><td>calcium hydroxide</td><td>Ca(OH)<sub>2</sub>(s)</td><td class="num">−985.2</td></tr>
+        <tr><td>calcium oxide</td><td>CaO(s)</td><td class="num">−634.9</td></tr>
+        <tr><td>calcium sulfate</td><td>CaSO<sub>4</sub>(s)</td><td class="num">−1434.5</td></tr>
+        <tr><td>carbon dioxide</td><td>CO<sub>2</sub>(g)</td><td class="num">−393.5</td></tr>
+        <tr><td>carbon monoxide</td><td>CO(g)</td><td class="num">−110.5</td></tr>
+        <tr><td>chromium(III) oxide</td><td>Cr<sub>2</sub>O<sub>3</sub>(s)</td><td class="num">−1139.7</td></tr>
+        <tr><td>copper(I) oxide</td><td>Cu<sub>2</sub>O(s)</td><td class="num">−168.6</td></tr>
+        <tr><td>copper(II) oxide</td><td>CuO(s)</td><td class="num">−157.3</td></tr>
+        <tr><td>copper(II) sulfate</td><td>CuSO<sub>4</sub>(s)</td><td class="num">−771.4</td></tr>
+        <tr><td>copper(I) sulfide</td><td>Cu<sub>2</sub>S(s)</td><td class="num">−79.5</td></tr>
+        <tr><td>copper(II) sulfide</td><td>CuS(s)</td><td class="num">−53.1</td></tr>
+        <tr><td>dinitrogen tetroxide</td><td>N<sub>2</sub>O<sub>4</sub>(g)</td><td class="num">+11.1</td></tr>
+        <tr><td>ethane</td><td>C<sub>2</sub>H<sub>6</sub>(g)</td><td class="num">−84.0</td></tr>
+        <tr><td>ethanoic acid (acetic acid)</td><td>CH<sub>3</sub>COOH(l)</td><td class="num">−484.3</td></tr>
+        <tr><td>ethanol</td><td>C<sub>2</sub>H<sub>5</sub>OH(l)</td><td class="num">−277.6</td></tr>
+        <tr><td>ethene (ethylene)</td><td>C<sub>2</sub>H<sub>4</sub>(g)</td><td class="num">+52.4</td></tr>
+        <tr><td>ethyne (acetylene)</td><td>C<sub>2</sub>H<sub>2</sub>(g)</td><td class="num">+227.4</td></tr>
+        <tr><td>glucose</td><td>C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>(s)</td><td class="num">−1273.3</td></tr>
+        <tr><td>hydrogen bromide</td><td>HBr(g)</td><td class="num">−36.3</td></tr>
+        <tr><td>hydrogen chloride</td><td>HCl(g)</td><td class="num">−92.3</td></tr>
+        <tr><td>hydrogen fluoride</td><td>HF(g)</td><td class="num">−273.3</td></tr>
+        <tr><td>hydrogen iodide</td><td>HI(g)</td><td class="num">+26.5</td></tr>
+        <tr><td>hydrogen perchlorate</td><td>HClO<sub>4</sub>(l)</td><td class="num">−40.6</td></tr>
+        <tr><td>hydrogen peroxide</td><td>H<sub>2</sub>O<sub>2</sub>(l)</td><td class="num">−187.8</td></tr>
+        <tr><td>hydrogen sulfide</td><td>H<sub>2</sub>S(g)</td><td class="num">−20.6</td></tr>
+        <tr><td>iron(II) oxide</td><td>FeO(s)</td><td class="num">−272.0</td></tr>
+        <tr><td>iron(III) oxide</td><td>Fe<sub>2</sub>O<sub>3</sub>(s)</td><td class="num">−824.2</td></tr>
+        <tr><td>iron(II,III) oxide (magnetite)</td><td>Fe<sub>3</sub>O<sub>4</sub>(s)</td><td class="num">−1118.4</td></tr>
+        <tr><td>lead(II) bromide</td><td>PbBr<sub>2</sub>(s)</td><td class="num">−278.7</td></tr>
+        <tr><td>lead(II) chloride</td><td>PbCl<sub>2</sub>(s)</td><td class="num">−359.4</td></tr>
+        <tr><td>lead(II) oxide (red)</td><td>PbO(s)</td><td class="num">−219.0</td></tr>
+        <tr><td>lead(IV) oxide</td><td>PbO<sub>2</sub>(s)</td><td class="num">−277.4</td></tr>
+        <tr><td>magnesium carbonate</td><td>MgCO<sub>3</sub>(s)</td><td class="num">−1095.8</td></tr>
+        <tr><td>magnesium chloride</td><td>MgCl<sub>2</sub>(s)</td><td class="num">−641.3</td></tr>
+        <tr><td>magnesium hydroxide</td><td>Mg(OH)<sub>2</sub>(s)</td><td class="num">−924.5</td></tr>
+        <tr><td>magnesium oxide</td><td>MgO(s)</td><td class="num">−601.6</td></tr>
+        <tr><td>magnesium sulfate</td><td>MgSO<sub>4</sub>(s)</td><td class="num">−1284.9</td></tr>
+        <tr><td>manganese(II) oxide</td><td>MnO(s)</td><td class="num">−385.2</td></tr>
+        <tr><td>manganese(IV) oxide</td><td>MnO<sub>2</sub>(s)</td><td class="num">−520.0</td></tr>
+        <tr><td>mercury(II) oxide (red)</td><td>HgO(s)</td><td class="num">−90.8</td></tr>
+        <tr><td>mercury(II) sulfide (red)</td><td>HgS(s)</td><td class="num">−58.2</td></tr>
+        <tr><td>methanal (formaldehyde)</td><td>CH<sub>2</sub>O(g)</td><td class="num">−108.6</td></tr>
+        <tr><td>methane</td><td>CH<sub>4</sub>(g)</td><td class="num">−74.6</td></tr>
+        <tr><td>methanoic acid (formic acid)</td><td>HCOOH(l)</td><td class="num">−425.0</td></tr>
+        <tr><td>methanol</td><td>CH<sub>3</sub>OH(l)</td><td class="num">−239.2</td></tr>
+        <tr><td>nickel(II) oxide</td><td>NiO(s)</td><td class="num">−240.6</td></tr>
+        <tr><td>nitric acid</td><td>HNO<sub>3</sub>(l)</td><td class="num">−174.1</td></tr>
+        <tr><td>nitrogen dioxide</td><td>NO<sub>2</sub>(g)</td><td class="num">+33.2</td></tr>
+        <tr><td>nitrogen monoxide</td><td>NO(g)</td><td class="num">+91.3</td></tr>
+        <tr><td>octane</td><td>C<sub>8</sub>H<sub>18</sub>(l)</td><td class="num">−250.1</td></tr>
+        <tr><td>pentane</td><td>C<sub>5</sub>H<sub>12</sub>(l)</td><td class="num">−173.5</td></tr>
+        <tr><td>phosphorus pentachloride</td><td>PCl<sub>5</sub>(s)</td><td class="num">−443.5</td></tr>
+        <tr><td>phosphorus trichloride (liquid)</td><td>PCl<sub>3</sub>(l)</td><td class="num">−319.7</td></tr>
+        <tr><td>phosphorus trichloride (vapour)</td><td>PCl<sub>3</sub>(g)</td><td class="num">−287.0</td></tr>
+        <tr><td>potassium bromide</td><td>KBr(s)</td><td class="num">−393.8</td></tr>
+        <tr><td>potassium chlorate</td><td>KClO<sub>3</sub>(s)</td><td class="num">−397.7</td></tr>
+        <tr><td>potassium chloride</td><td>KCl(s)</td><td class="num">−436.5</td></tr>
+        <tr><td>potassium hydroxide</td><td>KOH(s)</td><td class="num">−424.6</td></tr>
+        <tr><td>propane</td><td>C<sub>3</sub>H<sub>8</sub>(g)</td><td class="num">−103.8</td></tr>
+        <tr><td>silicon dioxide (α-quartz)</td><td>SiO<sub>2</sub>(s)</td><td class="num">−910.7</td></tr>
+        <tr><td>silver bromide</td><td>AgBr(s)</td><td class="num">−100.4</td></tr>
+        <tr><td>silver chloride</td><td>AgCl(s)</td><td class="num">−127.0</td></tr>
+        <tr><td>silver iodide</td><td>AgI(s)</td><td class="num">−61.8</td></tr>
+        <tr><td>sodium bromide</td><td>NaBr(s)</td><td class="num">−361.1</td></tr>
+        <tr><td>sodium chloride</td><td>NaCl(s)</td><td class="num">−411.2</td></tr>
+        <tr><td>sodium hydroxide</td><td>NaOH(s)</td><td class="num">−425.8</td></tr>
+        <tr><td>sodium iodide</td><td>NaI(s)</td><td class="num">−287.8</td></tr>
+        <tr><td>sucrose</td><td>C<sub>12</sub>H<sub>22</sub>O<sub>11</sub>(s)</td><td class="num">−2226.1</td></tr>
+        <tr><td>sulfur dioxide</td><td>SO<sub>2</sub>(g)</td><td class="num">−296.8</td></tr>
+        <tr><td>sulfuric acid</td><td>H<sub>2</sub>SO<sub>4</sub>(l)</td><td class="num">−814.0</td></tr>
+        <tr><td>sulfur trioxide (liquid)</td><td>SO<sub>3</sub>(l)</td><td class="num">−441.0</td></tr>
+        <tr><td>sulfur trioxide (vapour)</td><td>SO<sub>3</sub>(g)</td><td class="num">−395.7</td></tr>
+        <tr><td>tin(II) chloride</td><td>SnCl<sub>2</sub>(s)</td><td class="num">−325.1</td></tr>
+        <tr><td>tin(IV) chloride</td><td>SnCl<sub>4</sub>(l)</td><td class="num">−511.3</td></tr>
+        <tr><td>tin(II) oxide</td><td>SnO(s)</td><td class="num">−280.7</td></tr>
+        <tr><td>tin(IV) oxide</td><td>SnO<sub>2</sub>(s)</td><td class="num">−577.6</td></tr>
+        <tr><td>water (liquid)</td><td>H<sub>2</sub>O(l)</td><td class="num">−285.8</td></tr>
+        <tr><td>water (vapour)</td><td>H<sub>2</sub>O(g)</td><td class="num">−241.8</td></tr>
+        <tr><td>zinc oxide</td><td>ZnO(s)</td><td class="num">−350.5</td></tr>
+        <tr><td>zinc sulfide (sphalerite)</td><td>ZnS(s)</td><td class="num">−206.0</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SOLUBILITY -->
+<div class="section theme-blue" id="s-solubility">
+  <div class="section-header" onclick="toggle(this)">
+    💧 Solubility of Ionic Compounds in Water at 298.15 K <span class="arrow">▼</span>
+  </div>
+  <div class="section-body">
+    <div class="info-note">Threshold: ≥ 0.1 mol/L = <strong>very soluble (S)</strong>; &lt; 0.1 mol/L = <strong>slightly soluble (ss)</strong>. Based on K<sub>sp</sub> values. Hg<sub>2</sub><sup>2+</sup> is a polyatomic ion of mercury.</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Ion</th>
+          <th>NO<sub>3</sub><sup>−</sup>, ClO<sub>3</sub><sup>−</sup>, ClO<sub>4</sub><sup>−</sup>, CH<sub>3</sub>COO<sup>−</sup></th>
+          <th>F<sup>−</sup></th>
+          <th>Cl<sup>−</sup>, Br<sup>−</sup>, I<sup>−</sup></th>
+          <th>SO<sub>4</sub><sup>2−</sup></th>
+          <th>CO<sub>3</sub><sup>2−</sup>, PO<sub>4</sub><sup>3−</sup>, SO<sub>3</sub><sup>2−</sup></th>
+          <th>IO<sub>3</sub><sup>−</sup>, OOCCOO<sup>2−</sup></th>
+          <th>OH<sup>−</sup></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Group 1 ions + NH<sub>4</sub><sup>+</sup></strong></td>
+          <td class="sol-s">S (most)</td>
+          <td class="sol-s">S (most)</td>
+          <td class="sol-s">S (most)</td>
+          <td class="sol-s">S (most)</td>
+          <td class="sol-s">S — Group 1 &amp; NH<sub>4</sub><sup>+</sup></td>
+          <td class="sol-s">S — Group 1, NH<sub>4</sub><sup>+</sup>, Co(IO<sub>3</sub>)<sub>2</sub>, Fe<sub>2</sub>(OOCCOO)<sub>3</sub></td>
+          <td class="sol-s">S — Group 1 &amp; NH<sub>4</sub><sup>+</sup></td>
+        </tr>
+        <tr>
+          <td><strong>Slightly soluble ions</strong></td>
+          <td class="sol-i">RbClO<sub>4</sub>, CsClO<sub>4</sub>, AgCH<sub>3</sub>COO, Hg<sub>2</sub>(CH<sub>3</sub>COO)<sub>2</sub></td>
+          <td class="sol-i">Li<sup>+</sup>, Mg<sup>2+</sup>, Ca<sup>2+</sup>, Sr<sup>2+</sup>, Ba<sup>2+</sup>, Fe<sup>2+</sup>, Hg<sub>2</sub><sup>2+</sup>, Pb<sup>2+</sup></td>
+          <td class="sol-i">Cu<sup>+</sup>, Ag<sup>+</sup>, Hg<sub>2</sub><sup>2+</sup>, Pb<sup>2+</sup>, Tl<sup>+</sup></td>
+          <td class="sol-i">Ca<sup>2+</sup>, Sr<sup>2+</sup>, Ba<sup>2+</sup>, Ag<sup>+</sup>, Hg<sub>2</sub><sup>2+</sup>, Pb<sup>2+</sup>, Ra<sup>2+</sup></td>
+          <td class="sol-i">S (most)</td>
+          <td class="sol-i">S (most)</td>
+          <td class="sol-i">S (most)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ FLAME COLOURS -->
+<div class="section theme-red" id="s-flame">
+  <div class="section-header" onclick="toggle(this)">
+    🔥 Flame Colours of Elements <span class="arrow">▼</span>
+  </div>
+  <div class="section-body">
+    <div class="info-note">A flame test identifies a metal or metal ion based on the characteristic colour it produces when burned.</div>
+    <table>
+      <thead><tr><th>Element</th><th>Symbol</th><th>Flame Colour</th><th>Visual</th></tr></thead>
+      <tbody>
+        <tr><td>Lithium</td><td>Li</td><td>Red</td><td><span class="flame-swatch" style="background:#e0102a;"></span> Red</td></tr>
+        <tr><td>Sodium</td><td>Na</td><td>Yellow</td><td><span class="flame-swatch" style="background:#f5d000;"></span> Yellow</td></tr>
+        <tr><td>Potassium</td><td>K</td><td>Violet</td><td><span class="flame-swatch" style="background:#8a2be2;"></span> Violet</td></tr>
+        <tr><td>Rubidium</td><td>Rb</td><td>Violet</td><td><span class="flame-swatch" style="background:#8a2be2;"></span> Violet</td></tr>
+        <tr><td>Cesium</td><td>Cs</td><td>Violet</td><td><span class="flame-swatch" style="background:#8a2be2;"></span> Violet</td></tr>
+        <tr><td>Calcium</td><td>Ca</td><td>Yellowish red</td><td><span class="flame-swatch" style="background:#e87020;"></span> Yellowish red</td></tr>
+        <tr><td>Strontium</td><td>Sr</td><td>Scarlet red</td><td><span class="flame-swatch" style="background:#c01830;"></span> Scarlet red</td></tr>
+        <tr><td>Barium</td><td>Ba</td><td>Yellowish green</td><td><span class="flame-swatch" style="background:#aacc00;"></span> Yellowish green</td></tr>
+        <tr><td>Copper</td><td>Cu</td><td>Blue to green</td><td><span class="flame-swatch" style="background:#00a0b0;"></span> Blue-green</td></tr>
+        <tr><td>Boron</td><td>B</td><td>Yellowish green</td><td><span class="flame-swatch" style="background:#aacc00;"></span> Yellowish green</td></tr>
+        <tr><td>Lead</td><td>Pb</td><td>Blue-white</td><td><span class="flame-swatch" style="background:#c8d8f0;"></span> Blue-white</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ ELECTRODE -->
+<div class="section theme-purple" id="s-electrode">
+  <div class="section-header" onclick="toggle(this)">
+    ⚡ Standard Electrode Potentials (E°) <span class="arrow">▼</span>
+  </div>
+  <div class="section-body">
+    <div class="info-note">For 1.0 mol/L solutions at 298.15 K (25.00 °C) and 101.325 kPa. Listed as <strong>reduction half-reactions</strong>, highest to lowest E°. <span style="color:var(--green);font-weight:700;">Green = strong oxidizing agents (top)</span>; <span style="color:var(--red);font-weight:700;">Red = strong reducing agents (bottom)</span>.</div>
+    <input type="search" placeholder="Filter by species…" oninput="filterTable('electrode-table', this.value)" style="margin-bottom:10px;padding:6px 12px;border-radius:16px;border:1.5px solid var(--border);width:100%;max-width:340px;font-size:14px;">
+    <table id="electrode-table">
+      <thead><tr><th>Reduction Half-Reaction</th><th style="text-align:right;">E° (V)</th></tr></thead>
+      <tbody>
+        <tr class="electrode-row-pos"><td>F<sub>2</sub>(g) + 2e<sup>−</sup> → 2F<sup>−</sup>(aq)</td><td class="num">+2.87</td></tr>
+        <tr class="electrode-row-pos"><td>PbO<sub>2</sub>(s) + SO<sub>4</sub><sup>2−</sup>(aq) + 4H<sup>+</sup>(aq) + 2e<sup>−</sup> ⇌ PbSO<sub>4</sub>(s) + 2H<sub>2</sub>O(l)</td><td class="num">+1.69</td></tr>
+        <tr class="electrode-row-pos"><td>MnO<sub>4</sub><sup>−</sup>(aq) + 8H<sup>+</sup>(aq) + 5e<sup>−</sup> ⇌ Mn<sup>2+</sup>(aq) + 4H<sub>2</sub>O(l)</td><td class="num">+1.51</td></tr>
+        <tr class="electrode-row-pos"><td>Au<sup>3+</sup>(aq) + 3e<sup>−</sup> ⇌ Au(s)</td><td class="num">+1.50</td></tr>
+        <tr class="electrode-row-pos"><td>ClO<sub>4</sub><sup>−</sup>(aq) + 8H<sup>+</sup>(aq) + 8e<sup>−</sup> ⇌ Cl<sup>−</sup>(aq) + 4H<sub>2</sub>O(l)</td><td class="num">+1.39</td></tr>
+        <tr class="electrode-row-pos"><td>Cl<sub>2</sub>(g) + 2e<sup>−</sup> ⇌ 2Cl<sup>−</sup>(aq)</td><td class="num">+1.36</td></tr>
+        <tr class="electrode-row-pos"><td>2HNO<sub>2</sub>(aq) + 4H<sup>+</sup>(aq) + 4e<sup>−</sup> ⇌ N<sub>2</sub>O(g) + 3H<sub>2</sub>O(l)</td><td class="num">+1.30</td></tr>
+        <tr class="electrode-row-pos"><td>Cr<sub>2</sub>O<sub>7</sub><sup>2−</sup>(aq) + 14H<sup>+</sup>(aq) + 6e<sup>−</sup> ⇌ 2Cr<sup>3+</sup>(aq) + 7H<sub>2</sub>O(l)</td><td class="num">+1.23</td></tr>
+        <tr class="electrode-row-pos"><td>O<sub>2</sub>(g) + 4H<sup>+</sup>(aq) + 4e<sup>−</sup> ⇌ 2H<sub>2</sub>O(l)</td><td class="num">+1.23</td></tr>
+        <tr class="electrode-row-pos"><td>MnO<sub>2</sub>(s) + 4H<sup>+</sup>(aq) + 2e<sup>−</sup> ⇌ Mn<sup>2+</sup>(aq) + 2H<sub>2</sub>O(l)</td><td class="num">+1.22</td></tr>
+        <tr class="electrode-row-pos"><td>Br<sub>2</sub>(l) + 2e<sup>−</sup> ⇌ 2Br<sup>−</sup>(aq)</td><td class="num">+1.07</td></tr>
+        <tr class="electrode-row-pos"><td>Hg<sup>2+</sup>(aq) + 2e<sup>−</sup> ⇌ Hg(l)</td><td class="num">+0.85</td></tr>
+        <tr class="electrode-row-pos"><td>OCl<sup>−</sup>(aq) + H<sub>2</sub>O(l) + 2e<sup>−</sup> ⇌ Cl<sup>−</sup>(aq) + 2OH<sup>−</sup>(aq)</td><td class="num">+0.84</td></tr>
+        <tr class="electrode-row-pos"><td>2NO<sub>3</sub><sup>−</sup>(aq) + 4H<sup>+</sup>(aq) + 2e<sup>−</sup> ⇌ N<sub>2</sub>O<sub>4</sub>(g) + 2H<sub>2</sub>O(l)</td><td class="num">+0.80</td></tr>
+        <tr class="electrode-row-pos"><td>Ag<sup>+</sup>(aq) + e<sup>−</sup> ⇌ Ag(s)</td><td class="num">+0.80</td></tr>
+        <tr class="electrode-row-pos"><td>Fe<sup>3+</sup>(aq) + e<sup>−</sup> ⇌ Fe<sup>2+</sup>(aq)</td><td class="num">+0.77</td></tr>
+        <tr class="electrode-row-pos"><td>O<sub>2</sub>(g) + 2H<sup>+</sup>(aq) + 2e<sup>−</sup> ⇌ H<sub>2</sub>O<sub>2</sub>(l)</td><td class="num">+0.70</td></tr>
+        <tr class="electrode-row-pos"><td>I<sub>2</sub>(s) + 2e<sup>−</sup> ⇌ 2I<sup>−</sup>(aq)</td><td class="num">+0.54</td></tr>
+        <tr class="electrode-row-pos"><td>O<sub>2</sub>(g) + 2H<sub>2</sub>O(l) + 4e<sup>−</sup> ⇌ 4OH<sup>−</sup>(aq)</td><td class="num">+0.40</td></tr>
+        <tr class="electrode-row-pos"><td>Cu<sup>2+</sup>(aq) + 2e<sup>−</sup> ⇌ Cu(s)</td><td class="num">+0.34</td></tr>
+        <tr class="electrode-row-pos"><td>SO<sub>4</sub><sup>2−</sup>(aq) + 4H<sup>+</sup>(aq) + 2e<sup>−</sup> ⇌ H<sub>2</sub>SO<sub>3</sub>(aq) + H<sub>2</sub>O(l)</td><td class="num">+0.17</td></tr>
+        <tr class="electrode-row-pos"><td>Sn<sup>4+</sup>(aq) + 2e<sup>−</sup> ⇌ Sn<sup>2+</sup>(aq)</td><td class="num">+0.15</td></tr>
+        <tr class="electrode-row-pos"><td>S(s) + 2H<sup>+</sup>(aq) + 2e<sup>−</sup> ⇌ H<sub>2</sub>S(aq)</td><td class="num">+0.14</td></tr>
+        <tr class="electrode-row-pos"><td>AgBr(s) + e<sup>−</sup> ⇌ Ag(s) + Br<sup>−</sup>(aq)</td><td class="num">+0.07</td></tr>
+        <tr class="electrode-row-zero"><td>2H<sup>+</sup>(aq) + 2e<sup>−</sup> ⇌ H<sub>2</sub>(g) &nbsp;⟵ <em>Reference (SHE)</em></td><td class="num">0.00</td></tr>
+        <tr class="electrode-row-neg"><td>Pb<sup>2+</sup>(aq) + 2e<sup>−</sup> ⇌ Pb(s)</td><td class="num">−0.13</td></tr>
+        <tr class="electrode-row-neg"><td>Sn<sup>2+</sup>(aq) + 2e<sup>−</sup> ⇌ Sn(s)</td><td class="num">−0.14</td></tr>
+        <tr class="electrode-row-neg"><td>AgI(s) + e<sup>−</sup> ⇌ Ag(s) + I<sup>−</sup>(aq)</td><td class="num">−0.15</td></tr>
+        <tr class="electrode-row-neg"><td>Ni<sup>2+</sup>(aq) + 2e<sup>−</sup> ⇌ Ni(s)</td><td class="num">−0.26</td></tr>
+        <tr class="electrode-row-neg"><td>Co<sup>2+</sup>(aq) + 2e<sup>−</sup> ⇌ Co(s)</td><td class="num">−0.28</td></tr>
+        <tr class="electrode-row-neg"><td>PbSO<sub>4</sub>(s) + 2e<sup>−</sup> ⇌ Pb(s) + SO<sub>4</sub><sup>2−</sup>(aq)</td><td class="num">−0.36</td></tr>
+        <tr class="electrode-row-neg"><td>Se(s) + 2H<sup>+</sup>(aq) + 2e<sup>−</sup> ⇌ H<sub>2</sub>Se(aq)</td><td class="num">−0.40</td></tr>
+        <tr class="electrode-row-neg"><td>Cd<sup>2+</sup>(aq) + 2e<sup>−</sup> ⇌ Cd(s)</td><td class="num">−0.40</td></tr>
+        <tr class="electrode-row-neg"><td>Cr<sup>3+</sup>(aq) + e<sup>−</sup> ⇌ Cr<sup>2+</sup>(aq)</td><td class="num">−0.41</td></tr>
+        <tr class="electrode-row-neg"><td>Fe<sup>2+</sup>(aq) + 2e<sup>−</sup> ⇌ Fe(s)</td><td class="num">−0.45</td></tr>
+        <tr class="electrode-row-neg"><td>NO<sub>2</sub><sup>−</sup>(aq) + H<sub>2</sub>O(l) + e<sup>−</sup> ⇌ NO(g) + 2OH<sup>−</sup>(aq)</td><td class="num">−0.46</td></tr>
+        <tr class="electrode-row-neg"><td>Ag<sub>2</sub>S(s) + 2e<sup>−</sup> ⇌ 2Ag(s) + S<sup>2−</sup>(aq)</td><td class="num">−0.69</td></tr>
+        <tr class="electrode-row-neg"><td>Zn<sup>2+</sup>(aq) + 2e<sup>−</sup> ⇌ Zn(s)</td><td class="num">−0.76</td></tr>
+        <tr class="electrode-row-neg"><td>2H<sub>2</sub>O(l) + 2e<sup>−</sup> ⇌ H<sub>2</sub>(g) + 2OH<sup>−</sup>(aq)</td><td class="num">−0.83</td></tr>
+        <tr class="electrode-row-neg"><td>Cr<sup>2+</sup>(aq) + 2e<sup>−</sup> ⇌ Cr(s)</td><td class="num">−0.91</td></tr>
+        <tr class="electrode-row-neg"><td>Se(s) + 2e<sup>−</sup> ⇌ Se<sup>2−</sup>(aq)</td><td class="num">−0.92</td></tr>
+        <tr class="electrode-row-neg"><td>SO<sub>4</sub><sup>2−</sup>(aq) + H<sub>2</sub>O(l) + 2e<sup>−</sup> ⇌ SO<sub>3</sub><sup>2−</sup>(aq) + 2OH<sup>−</sup>(aq)</td><td class="num">−0.93</td></tr>
+        <tr class="electrode-row-neg"><td>Al<sup>3+</sup>(aq) + 3e<sup>−</sup> ⇌ Al(s)</td><td class="num">−1.66</td></tr>
+        <tr class="electrode-row-neg"><td>Mg<sup>2+</sup>(aq) + 2e<sup>−</sup> ⇌ Mg(s)</td><td class="num">−2.37</td></tr>
+        <tr class="electrode-row-neg"><td>Na<sup>+</sup>(aq) + e<sup>−</sup> ⇌ Na(s)</td><td class="num">−2.71</td></tr>
+        <tr class="electrode-row-neg"><td>Ca<sup>2+</sup>(aq) + 2e<sup>−</sup> ⇌ Ca(s)</td><td class="num">−2.87</td></tr>
+        <tr class="electrode-row-neg"><td>Ba<sup>2+</sup>(aq) + 2e<sup>−</sup> ⇌ Ba(s)</td><td class="num">−2.91</td></tr>
+        <tr class="electrode-row-neg"><td>K<sup>+</sup>(aq) + e<sup>−</sup> ⇌ K(s)</td><td class="num">−2.93</td></tr>
+        <tr class="electrode-row-neg"><td>Li<sup>+</sup>(aq) + e<sup>−</sup> ⇌ Li(s)</td><td class="num">−3.04</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ ACIDS & BASES -->
+<div class="section theme-green" id="s-acids">
+  <div class="section-header" onclick="toggle(this)">
+    🧪 Relative Strengths of Acids &amp; Bases (K<sub>a</sub>) <span class="arrow">▼</span>
+  </div>
+  <div class="section-body">
+    <div class="info-note">Listed from <strong>strongest acid (top)</strong> to <strong>weakest acid (bottom)</strong>. The conjugate base strength increases going down. An approximation may be used instead of the quadratic formula when [acid] is &gt;1000× K<sub>a</sub> (i.e., H<sub>3</sub>O<sup>+</sup> produced is &lt;5% of original acid concentration).</div>
+    <input type="search" placeholder="Filter by name or formula…" oninput="filterTable('acids-table', this.value)" style="margin-bottom:10px;padding:6px 12px;border-radius:16px;border:1.5px solid var(--border);width:100%;max-width:340px;font-size:14px;">
+    <table id="acids-table">
+      <thead>
+        <tr>
+          <th>Common / IUPAC Name</th>
+          <th>Acid Formula</th>
+          <th>Conjugate Base Formula</th>
+          <th style="text-align:right;">K<sub>a</sub></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>aqueous perchloric acid / hydrogen perchlorate</td><td>HClO<sub>4</sub>(aq)</td><td>ClO<sub>4</sub><sup>−</sup>(aq)</td><td class="num">very large</td></tr>
+        <tr><td>aqueous hydroiodic acid / hydrogen iodide</td><td>HI(aq)</td><td>I<sup>−</sup>(aq)</td><td class="num">very large</td></tr>
+        <tr><td>aqueous hydrobromic acid / hydrogen bromide</td><td>HBr(aq)</td><td>Br<sup>−</sup>(aq)</td><td class="num">very large</td></tr>
+        <tr><td>aqueous hydrochloric acid / hydrogen chloride</td><td>HCl(aq)</td><td>Cl<sup>−</sup>(aq)</td><td class="num">very large</td></tr>
+        <tr><td>aqueous sulfuric acid / hydrogen sulfate</td><td>H<sub>2</sub>SO<sub>4</sub>(aq)</td><td>HSO<sub>4</sub><sup>−</sup>(aq)</td><td class="num">very large</td></tr>
+        <tr><td>aqueous nitric acid / hydrogen nitrate</td><td>HNO<sub>3</sub>(aq)</td><td>NO<sub>3</sub><sup>−</sup>(aq)</td><td class="num">very large</td></tr>
+        <tr><td>hydronium ion</td><td>H<sub>3</sub>O<sup>+</sup>(aq)</td><td>H<sub>2</sub>O(l)</td><td class="num">1</td></tr>
+        <tr><td>oxalic acid</td><td>HOOCCOOH(aq)</td><td>HOOCCOO<sup>−</sup>(aq)</td><td class="num">5.6 × 10<sup>−2</sup></td></tr>
+        <tr><td>aqueous sulfurous acid / hydrogen sulfite</td><td>H<sub>2</sub>SO<sub>3</sub>(aq)</td><td>HSO<sub>3</sub><sup>−</sup>(aq)</td><td class="num">1.4 × 10<sup>−2</sup></td></tr>
+        <tr><td>hydrogen sulfate ion</td><td>HSO<sub>4</sub><sup>−</sup>(aq)</td><td>SO<sub>4</sub><sup>2−</sup>(aq)</td><td class="num">1.0 × 10<sup>−2</sup></td></tr>
+        <tr><td>aqueous phosphoric acid / hydrogen phosphate</td><td>H<sub>3</sub>PO<sub>4</sub>(aq)</td><td>H<sub>2</sub>PO<sub>4</sub><sup>−</sup>(aq)</td><td class="num">6.9 × 10<sup>−3</sup></td></tr>
+        <tr><td>citric acid / 2-hydroxy-1,2,3-propanetricarboxylic acid</td><td>C<sub>3</sub>H<sub>5</sub>O(COOH)<sub>3</sub>(aq)</td><td>C<sub>3</sub>H<sub>5</sub>O(COOH)<sub>2</sub>COO<sup>−</sup>(aq)</td><td class="num">7.4 × 10<sup>−4</sup></td></tr>
+        <tr><td>aqueous hydrofluoric acid / hydrogen fluoride</td><td>HF(aq)</td><td>F<sup>−</sup>(aq)</td><td class="num">6.3 × 10<sup>−4</sup></td></tr>
+        <tr><td>aqueous nitrous acid / hydrogen nitrite</td><td>HNO<sub>2</sub>(aq)</td><td>NO<sub>2</sub><sup>−</sup>(aq)</td><td class="num">5.6 × 10<sup>−4</sup></td></tr>
+        <tr><td>formic acid / methanoic acid</td><td>HCOOH(aq)</td><td>HCOO<sup>−</sup>(aq)</td><td class="num">1.8 × 10<sup>−4</sup></td></tr>
+        <tr><td>hydrogen oxalate ion</td><td>HOOCCOO<sup>−</sup>(aq)</td><td>OOCCOO<sup>2−</sup>(aq)</td><td class="num">1.5 × 10<sup>−4</sup></td></tr>
+        <tr><td>lactic acid / 2-hydroxypropanoic acid</td><td>C<sub>2</sub>H<sub>5</sub>OCOOH(aq)</td><td>C<sub>2</sub>H<sub>5</sub>OCOO<sup>−</sup>(aq)</td><td class="num">1.4 × 10<sup>−4</sup></td></tr>
+        <tr><td>ascorbic acid (1st ionization)</td><td>C<sub>6</sub>H<sub>6</sub>O<sub>6</sub>H<sub>2</sub>(aq)</td><td>C<sub>6</sub>H<sub>6</sub>O<sub>6</sub>H<sup>−</sup>(aq)</td><td class="num">9.1 × 10<sup>−5</sup></td></tr>
+        <tr><td>benzoic acid / benzenecarboxylic acid</td><td>C<sub>6</sub>H<sub>5</sub>COOH(aq)</td><td>C<sub>6</sub>H<sub>5</sub>COO<sup>−</sup>(aq)</td><td class="num">6.3 × 10<sup>−5</sup></td></tr>
+        <tr><td>acetic acid / ethanoic acid</td><td>CH<sub>3</sub>COOH(aq)</td><td>CH<sub>3</sub>COO<sup>−</sup>(aq)</td><td class="num">1.8 × 10<sup>−5</sup></td></tr>
+        <tr><td>dihydrogen citrate ion</td><td>C<sub>3</sub>H<sub>5</sub>O(COOH)<sub>2</sub>COO<sup>−</sup>(aq)</td><td>C<sub>3</sub>H<sub>5</sub>O(COOH)(COO)<sub>2</sub><sup>2−</sup>(aq)</td><td class="num">1.7 × 10<sup>−5</sup></td></tr>
+        <tr><td>butyric acid / butanoic acid</td><td>C<sub>3</sub>H<sub>7</sub>COOH(aq)</td><td>C<sub>3</sub>H<sub>7</sub>COO<sup>−</sup>(aq)</td><td class="num">1.5 × 10<sup>−5</sup></td></tr>
+        <tr><td>propionic acid / propanoic acid</td><td>C<sub>2</sub>H<sub>5</sub>COOH(aq)</td><td>C<sub>2</sub>H<sub>5</sub>COO<sup>−</sup>(aq)</td><td class="num">1.3 × 10<sup>−5</sup></td></tr>
+        <tr><td>carbonic acid / aqueous CO<sub>2</sub> + H<sub>2</sub>O</td><td>H<sub>2</sub>CO<sub>3</sub>(aq)</td><td>HCO<sub>3</sub><sup>−</sup>(aq)</td><td class="num">4.5 × 10<sup>−7</sup></td></tr>
+        <tr><td>hydrogen citrate ion</td><td>C<sub>3</sub>H<sub>5</sub>O(COOH)(COO)<sub>2</sub><sup>2−</sup>(aq)</td><td>C<sub>3</sub>H<sub>5</sub>O(COO)<sub>3</sub><sup>3−</sup>(aq)</td><td class="num">4.0 × 10<sup>−7</sup></td></tr>
+        <tr><td>aqueous hydrosulfuric acid / hydrogen sulfide</td><td>H<sub>2</sub>S(aq)</td><td>HS<sup>−</sup>(aq)</td><td class="num">8.9 × 10<sup>−8</sup></td></tr>
+        <tr><td>hydrogen sulfite ion</td><td>HSO<sub>3</sub><sup>−</sup>(aq)</td><td>SO<sub>3</sub><sup>2−</sup>(aq)</td><td class="num">6.3 × 10<sup>−8</sup></td></tr>
+        <tr><td>dihydrogen phosphate ion</td><td>H<sub>2</sub>PO<sub>4</sub><sup>−</sup>(aq)</td><td>HPO<sub>4</sub><sup>2−</sup>(aq)</td><td class="num">6.2 × 10<sup>−8</sup></td></tr>
+        <tr><td>aqueous hypochlorous acid / hydrogen hypochlorite</td><td>HClO(aq)</td><td>ClO<sup>−</sup>(aq)</td><td class="num">4.0 × 10<sup>−8</sup></td></tr>
+        <tr><td>aqueous hydrocyanic acid / hydrogen cyanide</td><td>HCN(aq)</td><td>CN<sup>−</sup>(aq)</td><td class="num">6.2 × 10<sup>−10</sup></td></tr>
+        <tr><td>ammonium ion</td><td>NH<sub>4</sub><sup>+</sup>(aq)</td><td>NH<sub>3</sub>(aq)</td><td class="num">5.6 × 10<sup>−10</sup></td></tr>
+        <tr><td>hydrogen carbonate ion</td><td>HCO<sub>3</sub><sup>−</sup>(aq)</td><td>CO<sub>3</sub><sup>2−</sup>(aq)</td><td class="num">4.7 × 10<sup>−11</sup></td></tr>
+        <tr><td>hydrogen ascorbate ion</td><td>C<sub>6</sub>H<sub>6</sub>O<sub>6</sub>H<sup>−</sup>(aq)</td><td>C<sub>6</sub>H<sub>6</sub>O<sub>6</sub><sup>2−</sup>(aq)</td><td class="num">2.0 × 10<sup>−12</sup></td></tr>
+        <tr><td>hydrogen phosphate ion</td><td>HPO<sub>4</sub><sup>2−</sup>(aq)</td><td>PO<sub>4</sub><sup>3−</sup>(aq)</td><td class="num">4.8 × 10<sup>−13</sup></td></tr>
+        <tr><td>water</td><td>H<sub>2</sub>O(l)</td><td>OH<sup>−</sup>(aq)</td><td class="num">1.0 × 10<sup>−14</sup></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ INDICATORS -->
+<div class="section theme-red" id="s-indicators">
+  <div class="section-header" onclick="toggle(this)">
+    🌈 Acid–Base Indicators at 298.15 K <span class="arrow">▼</span>
+  </div>
+  <div class="section-body">
+    <table>
+      <thead>
+        <tr>
+          <th>Indicator</th>
+          <th>Abbreviations</th>
+          <th>pH Range</th>
+          <th>Colour Change (↑ pH)</th>
+          <th style="text-align:right;">K<sub>a</sub></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>methyl violet</td><td>HMv / Mv<sup>−</sup></td><td>0.0 – 1.6</td><td><span class="colour-badge" style="background:#f0d000;">yellow</span> → <span class="colour-badge" style="background:#4040c0;">blue</span></td><td class="num">~2 × 10<sup>−1</sup></td></tr>
+        <tr><td>cresol red (1st)</td><td>H<sub>2</sub>Cr / HCr<sup>−</sup></td><td>0.0 – 1.0</td><td><span class="colour-badge" style="background:#c01010;">red</span> → <span class="colour-badge" style="background:#f0d000;">yellow</span></td><td class="num">~3 × 10<sup>−1</sup></td></tr>
+        <tr><td>cresol red (2nd)</td><td>HCr<sup>−</sup> / Cr<sup>2−</sup></td><td>7.0 – 8.8</td><td><span class="colour-badge" style="background:#f0d000;">yellow</span> → <span class="colour-badge" style="background:#c01010;">red</span></td><td class="num">3.5 × 10<sup>−9</sup></td></tr>
+        <tr><td>thymol blue (1st)</td><td>H<sub>2</sub>Tb / HTb<sup>−</sup></td><td>1.2 – 2.8</td><td><span class="colour-badge" style="background:#c01010;">red</span> → <span class="colour-badge" style="background:#f0d000;">yellow</span></td><td class="num">2.2 × 10<sup>−2</sup></td></tr>
+        <tr><td>thymol blue (2nd)</td><td>HTb<sup>−</sup> / Tb<sup>2−</sup></td><td>8.0 – 9.6</td><td><span class="colour-badge" style="background:#f0d000;">yellow</span> → <span class="colour-badge" style="background:#4040c0;">blue</span></td><td class="num">6.3 × 10<sup>−10</sup></td></tr>
+        <tr><td>orange IV</td><td>HOr / Or<sup>−</sup></td><td>1.4 – 2.8</td><td><span class="colour-badge" style="background:#c01010;">red</span> → <span class="colour-badge" style="background:#f0d000;">yellow</span></td><td class="num">~1 × 10<sup>−2</sup></td></tr>
+        <tr><td>methyl orange</td><td>HMo / Mo<sup>−</sup></td><td>3.2 – 4.4</td><td><span class="colour-badge" style="background:#c01010;">red</span> → <span class="colour-badge" style="background:#f0d000;">yellow</span></td><td class="num">3.5 × 10<sup>−4</sup></td></tr>
+        <tr><td>bromocresol green</td><td>HBg / Bg<sup>−</sup></td><td>3.8 – 5.4</td><td><span class="colour-badge" style="background:#f0d000;">yellow</span> → <span class="colour-badge" style="background:#4040c0;">blue</span></td><td class="num">1.3 × 10<sup>−5</sup></td></tr>
+        <tr><td>methyl red</td><td>HMr / Mr<sup>−</sup></td><td>4.8 – 6.0</td><td><span class="colour-badge" style="background:#c01010;">red</span> → <span class="colour-badge" style="background:#f0d000;">yellow</span></td><td class="num">1.0 × 10<sup>−5</sup></td></tr>
+        <tr><td>chlorophenol red</td><td>HCh / Ch<sup>−</sup></td><td>5.2 – 6.8</td><td><span class="colour-badge" style="background:#f0d000;">yellow</span> → <span class="colour-badge" style="background:#c01010;">red</span></td><td class="num">5.6 × 10<sup>−7</sup></td></tr>
+        <tr><td>bromothymol blue</td><td>HBb / Bb<sup>−</sup></td><td>6.0 – 7.6</td><td><span class="colour-badge" style="background:#f0d000;">yellow</span> → <span class="colour-badge" style="background:#4040c0;">blue</span></td><td class="num">5.0 × 10<sup>−8</sup></td></tr>
+        <tr><td>phenol red</td><td>HPr / Pr<sup>−</sup></td><td>6.6 – 8.0</td><td><span class="colour-badge" style="background:#f0d000;">yellow</span> → <span class="colour-badge" style="background:#c01010;">red</span></td><td class="num">1.0 × 10<sup>−8</sup></td></tr>
+        <tr><td>phenolphthalein</td><td>HPh / Ph<sup>−</sup></td><td>8.2 – 10.0</td><td><span class="colour-badge" style="background:#ccc;color:#333;">colourless</span> → <span class="colour-badge" style="background:#ff80c0;">pink</span></td><td class="num">3.2 × 10<sup>−10</sup></td></tr>
+        <tr><td>thymolphthalein</td><td>HTh / Th<sup>−</sup></td><td>9.4 – 10.6</td><td><span class="colour-badge" style="background:#ccc;color:#333;">colourless</span> → <span class="colour-badge" style="background:#4040c0;">blue</span></td><td class="num">1.0 × 10<sup>−10</sup></td></tr>
+        <tr><td>alizarin yellow R</td><td>HAy / Ay<sup>−</sup></td><td>10.1 – 12.0</td><td><span class="colour-badge" style="background:#f0d000;">yellow</span> → <span class="colour-badge" style="background:#c01010;">red</span></td><td class="num">6.9 × 10<sup>−12</sup></td></tr>
+        <tr><td>indigo carmine</td><td>HIc / Ic<sup>−</sup></td><td>11.4 – 13.0</td><td><span class="colour-badge" style="background:#4040c0;">blue</span> → <span class="colour-badge" style="background:#f0d000;">yellow</span></td><td class="num">~6 × 10<sup>−12</sup></td></tr>
+        <tr><td>1,3,5-trinitrobenzene</td><td>HNb / Nb<sup>−</sup></td><td>12.0 – 14.0</td><td><span class="colour-badge" style="background:#ccc;color:#333;">colourless</span> → <span class="colour-badge" style="background:#e07020;">orange</span></td><td class="num">~1 × 10<sup>−13</sup></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ ION COLOURS -->
+<div class="section theme-teal" id="s-aqcolours">
+  <div class="section-header" onclick="toggle(this)">
+    🎨 Colours of Common Aqueous Ions <span class="arrow">▼</span>
+  </div>
+  <div class="section-body">
+    <table>
+      <thead>
+        <tr><th>Ionic Species</th><th>1.0 mol/L</th><th>0.010 mol/L</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>chromate (CrO<sub>4</sub><sup>2−</sup>)</td><td><span class="colour-badge" style="background:#d4c000;">yellow</span></td><td><span class="colour-badge" style="background:#e8dc80;color:#333;">pale yellow</span></td></tr>
+        <tr><td>chromium(III) (Cr<sup>3+</sup>)</td><td><span class="colour-badge" style="background:#2060a0;">blue-green</span></td><td><span class="colour-badge" style="background:#407040;">green</span></td></tr>
+        <tr><td>chromium(II) (Cr<sup>2+</sup>)</td><td><span class="colour-badge" style="background:#102090;">dark blue</span></td><td><span class="colour-badge" style="background:#8090d0;">pale blue</span></td></tr>
+        <tr><td>cobalt(II) (Co<sup>2+</sup>)</td><td><span class="colour-badge" style="background:#c01010;">red</span></td><td><span class="colour-badge" style="background:#e08080;">pink</span></td></tr>
+        <tr><td>copper(I) (Cu<sup>+</sup>)</td><td><span class="colour-badge" style="background:#008080;">blue-green</span></td><td><span class="colour-badge" style="background:#80c8c8;">pale blue-green</span></td></tr>
+        <tr><td>copper(II) (Cu<sup>2+</sup>)</td><td><span class="colour-badge" style="background:#1060c0;">blue</span></td><td><span class="colour-badge" style="background:#80b0e0;">pale blue</span></td></tr>
+        <tr><td>dichromate (Cr<sub>2</sub>O<sub>7</sub><sup>2−</sup>)</td><td><span class="colour-badge" style="background:#e06000;">orange</span></td><td><span class="colour-badge" style="background:#f0b080;">pale orange</span></td></tr>
+        <tr><td>iron(II) (Fe<sup>2+</sup>)</td><td><span class="colour-badge" style="background:#80b040;">lime green</span></td><td><span class="colour-badge" style="background:#ccc;color:#333;">colourless</span></td></tr>
+        <tr><td>iron(III) (Fe<sup>3+</sup>)</td><td><span class="colour-badge" style="background:#c08010;">orange-yellow</span></td><td><span class="colour-badge" style="background:#e8d080;color:#333;">pale yellow</span></td></tr>
+        <tr><td>manganese(II) (Mn<sup>2+</sup>)</td><td><span class="colour-badge" style="background:#e8b8b8;color:#333;">pale pink</span></td><td><span class="colour-badge" style="background:#ccc;color:#333;">colourless</span></td></tr>
+        <tr><td>nickel(II) (Ni<sup>2+</sup>)</td><td><span class="colour-badge" style="background:#408060;">blue-green</span></td><td><span class="colour-badge" style="background:#80c0a0;">pale blue-green</span></td></tr>
+        <tr><td>permanganate (MnO<sub>4</sub><sup>−</sup>)</td><td><span class="colour-badge" style="background:#500080;">deep purple</span></td><td><span class="colour-badge" style="background:#c060c0;">purple-pink</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</main>
+
+<script>
+// ── Periodic Table Data ──────────────────────────────────────────
+// Format: [atomic_num, symbol, name, mass, ion, en, type, col, row]
+const elements = [
+  [1,'H','hydrogen','1.01','1+,1−','2.2','hydrogen-cell',1,1],
+  [2,'He','helium','4.00','—','—','noble',18,1],
+  [3,'Li','lithium','6.94','1+','1.0','alkali',1,2],
+  [4,'Be','beryllium','9.01','2+','1.6','alkaline',2,2],
+  [5,'B','boron','10.81','—','2.0','metalloid',13,2],
+  [6,'C','carbon','12.01','—','2.6','nonmetal',14,2],
+  [7,'N','nitrogen','14.01','—','3.0','nonmetal',15,2],
+  [8,'O','oxygen','16.00','—','3.4','nonmetal',16,2],
+  [9,'F','fluorine','19.00','—','4.0','halogen',17,2],
+  [10,'Ne','neon','20.18','—','—','noble',18,2],
+  [11,'Na','sodium','22.99','1+','0.9','alkali',1,3],
+  [12,'Mg','magnesium','24.31','2+','1.3','alkaline',2,3],
+  [13,'Al','aluminium','26.98','3+','1.6','post-tm',13,3],
+  [14,'Si','silicon','28.09','—','1.9','metalloid',14,3],
+  [15,'P','phosphorus','30.97','—','2.2','nonmetal',15,3],
+  [16,'S','sulfur','32.07','—','2.6','nonmetal',16,3],
+  [17,'Cl','chlorine','35.45','—','3.2','halogen',17,3],
+  [18,'Ar','argon','39.95','—','—','noble',18,3],
+  [19,'K','potassium','39.10','1+','0.8','alkali',1,4],
+  [20,'Ca','calcium','40.08','2+','1.0','alkaline',2,4],
+  [21,'Sc','scandium','44.96','3+','1.4','transition',3,4],
+  [22,'Ti','titanium','47.87','4+,3+','1.5','transition',4,4],
+  [23,'V','vanadium','50.94','5+,4+','1.6','transition',5,4],
+  [24,'Cr','chromium','52.00','3+,2+','1.7','transition',6,4],
+  [25,'Mn','manganese','54.94','2+,4+','1.6','transition',7,4],
+  [26,'Fe','iron','55.85','3+,2+','1.8','transition',8,4],
+  [27,'Co','cobalt','58.93','2+,3+','1.9','transition',9,4],
+  [28,'Ni','nickel','58.69','2+,3+','1.9','transition',10,4],
+  [29,'Cu','copper','63.55','2+,1+','1.9','transition',11,4],
+  [30,'Zn','zinc','65.41','2+','1.7','transition',12,4],
+  [31,'Ga','gallium','69.72','3+','1.8','post-tm',13,4],
+  [32,'Ge','germanium','72.64','4+','2.0','metalloid',14,4],
+  [33,'As','arsenic','74.92','—','2.2','metalloid',15,4],
+  [34,'Se','selenium','78.96','—','2.6','nonmetal',16,4],
+  [35,'Br','bromine','79.90','—','3.0','halogen',17,4],
+  [36,'Kr','krypton','83.80','—','—','noble',18,4],
+  [37,'Rb','rubidium','85.47','1+','0.8','alkali',1,5],
+  [38,'Sr','strontium','87.62','2+','1.0','alkaline',2,5],
+  [39,'Y','yttrium','88.91','3+','1.2','transition',3,5],
+  [40,'Zr','zirconium','91.22','4+','1.3','transition',4,5],
+  [41,'Nb','niobium','92.91','5+,3+','1.6','transition',5,5],
+  [42,'Mo','molybdenum','95.94','6+','2.2','transition',6,5],
+  [43,'Tc','technetium','(98)','7+','2.1','transition',7,5],
+  [44,'Ru','ruthenium','101.07','3+','2.2','transition',8,5],
+  [45,'Rh','rhodium','102.91','3+','2.3','transition',9,5],
+  [46,'Pd','palladium','106.42','2+,3+','2.2','transition',10,5],
+  [47,'Ag','silver','107.87','1+','1.9','transition',11,5],
+  [48,'Cd','cadmium','112.41','2+','1.7','transition',12,5],
+  [49,'In','indium','114.82','3+','1.8','post-tm',13,5],
+  [50,'Sn','tin','118.71','4+,2+','2.0','post-tm',14,5],
+  [51,'Sb','antimony','121.76','3+,5+','2.1','metalloid',15,5],
+  [52,'Te','tellurium','127.60','—','2.1','metalloid',16,5],
+  [53,'I','iodine','126.90','—','2.7','halogen',17,5],
+  [54,'Xe','xenon','131.29','—','2.6','noble',18,5],
+  [55,'Cs','cesium','132.91','1+','0.8','alkali',1,6],
+  [56,'Ba','barium','137.33','2+','0.9','alkaline',2,6],
+  [57,'La','lanthanum','138.91','3+','1.1','lanthanide',3,6],
+  [72,'Hf','hafnium','178.49','4+','1.3','transition',4,6],
+  [73,'Ta','tantalum','180.95','5+','1.5','transition',5,6],
+  [74,'W','tungsten','183.84','6+','1.7','transition',6,6],
+  [75,'Re','rhenium','186.21','7+','1.9','transition',7,6],
+  [76,'Os','osmium','190.23','4+','2.2','transition',8,6],
+  [77,'Ir','iridium','192.22','4+','2.2','transition',9,6],
+  [78,'Pt','platinum','195.08','4+,2+','2.2','transition',10,6],
+  [79,'Au','gold','196.97','3+,1+','2.4','transition',11,6],
+  [80,'Hg','mercury','200.59','2+,1+','1.9','transition',12,6],
+  [81,'Tl','thallium','204.38','1+,3+','1.8','post-tm',13,6],
+  [82,'Pb','lead','207.2*','2+,4+','1.8','post-tm',14,6],
+  [83,'Bi','bismuth','208.98','3+,5+','1.9','post-tm',15,6],
+  [84,'Po','polonium','(209)','2+,4+','2.0','post-tm',16,6],
+  [85,'At','astatine','(210)','—','—','halogen',17,6],
+  [86,'Rn','radon','(222)','—','—','noble',18,6],
+  [87,'Fr','francium','(223)','1+','0.7','alkali',1,7],
+  [88,'Ra','radium','(226)','2+','0.9','alkaline',2,7],
+  [89,'Ac','actinium','(227)','3+','1.1','actinide',3,7],
+  [104,'Rf','rutherfordium','(261)','4+','—','transition',4,7],
+  [105,'Db','dubnium','(262)','—','—','transition',5,7],
+  [106,'Sg','seaborgium','(266)','—','—','transition',6,7],
+  [107,'Bh','bohrium','(264)','—','—','transition',7,7],
+  [108,'Hs','hassium','(277)','—','—','transition',8,7],
+  [109,'Mt','meitnerium','(268)','—','—','transition',9,7],
+  [110,'Ds','darmstadtium','(271)','—','—','transition',10,7],
+  [111,'Rg','roentgenium','(272)','—','—','transition',11,7],
+  // Lanthanides (row 9 in grid = visual row 8.5)
+  [58,'Ce','cerium','140.12','3+','1.1','lanthanide',4,9],
+  [59,'Pr','praseodymium','140.91','3+','1.1','lanthanide',5,9],
+  [60,'Nd','neodymium','144.24','3+','1.1','lanthanide',6,9],
+  [61,'Pm','promethium','(145)','3+','—','lanthanide',7,9],
+  [62,'Sm','samarium','150.36','3+,2+','1.2','lanthanide',8,9],
+  [63,'Eu','europium','151.96','3+,2+','—','lanthanide',9,9],
+  [64,'Gd','gadolinium','157.25','3+','1.2','lanthanide',10,9],
+  [65,'Tb','terbium','158.93','3+','—','lanthanide',11,9],
+  [66,'Dy','dysprosium','162.50','3+','1.2','lanthanide',12,9],
+  [67,'Ho','holmium','164.93','3+','1.2','lanthanide',13,9],
+  [68,'Er','erbium','167.26','3+','1.2','lanthanide',14,9],
+  [69,'Tm','thulium','168.93','3+','1.3','lanthanide',15,9],
+  [70,'Yb','ytterbium','173.04','3+,2+','—','lanthanide',16,9],
+  [71,'Lu','lutetium','174.97','3+','1.0','lanthanide',17,9],
+  // Actinides
+  [90,'Th','thorium','232.04','4+','1.3','actinide',4,10],
+  [91,'Pa','protactinium','231.04','5+,4+','1.5','actinide',5,10],
+  [92,'U','uranium','238.03','6+,4+','1.7','actinide',6,10],
+  [93,'Np','neptunium','(237)','5+','1.3','actinide',7,10],
+  [94,'Pu','plutonium','(244)','4+,6+','1.3','actinide',8,10],
+  [95,'Am','americium','(243)','3+,4+','—','actinide',9,10],
+  [96,'Cm','curium','(247)','3+','—','actinide',10,10],
+  [97,'Bk','berkelium','(247)','3+,4+','—','actinide',11,10],
+  [98,'Cf','californium','(251)','3+','—','actinide',12,10],
+  [99,'Es','einsteinium','(252)','3+','—','actinide',13,10],
+  [100,'Fm','fermium','(257)','3+','—','actinide',14,10],
+  [101,'Md','mendelevium','(258)','2+,3+','—','actinide',15,10],
+  [102,'No','nobelium','(259)','2+,3+','—','actinide',16,10],
+  [103,'Lr','lawrencium','(262)','3+','—','actinide',17,10],
+];
+
+function buildPeriodicTable() {
+  const grid = document.getElementById('pt-grid');
+  // We build a 10-row × 18-col grid
+  // rows 1-7 = main table, row 8 = blank separator, rows 9-10 = lanthanides/actinides
+  const totalRows = 10;
+  const cols = 18;
+  const cells = {};
+  elements.forEach(e => { cells[`${e[8]}-${e[7]}`] = e; });
+
+  // Add labels for lanthanide/actinide rows in col 3
+  const lnLabel = ['57-71','La-Lu'];
+  const acLabel = ['89-103','Ac-Lr'];
+
+  for (let row = 1; row <= totalRows; row++) {
+    for (let col = 1; col <= cols; col++) {
+      const key = `${row}-${col}`;
+      const el = cells[key];
+      if (row === 8) { // blank separator row
+        const blank = document.createElement('div');
+        blank.className = 'pt-cell pt-empty';
+        blank.style.height = '8px'; blank.style.minHeight = '8px';
+        grid.appendChild(blank);
+        continue;
+      }
+      if ((row === 6 || row === 7) && col === 3) {
+        // Placeholder cell for lanthanide/actinide series
+        const ph = document.createElement('div');
+        ph.className = 'pt-cell ' + (row === 6 ? 'lanthanide' : 'actinide');
+        ph.style.fontSize = '9px'; ph.style.textAlign = 'center'; ph.style.justifyContent = 'center';
+        ph.innerHTML = row === 6 ? '<span style="font-size:8px;">La–Lu<br>57–71</span>' : '<span style="font-size:8px;">Ac–Lr<br>89–103</span>';
+        grid.appendChild(ph);
+        continue;
+      }
+      if (row === 9 && col <= 3) {
+        const blank = document.createElement('div');
+        blank.className = 'pt-cell pt-empty';
+        grid.appendChild(blank);
+        continue;
+      }
+      if (row === 10 && col <= 3) {
+        const blank = document.createElement('div');
+        blank.className = 'pt-cell pt-empty';
+        grid.appendChild(blank);
+        continue;
+      }
+      if (el) {
+        const cell = document.createElement('div');
+        cell.className = `pt-cell ${el[6]}`;
+        cell.title = `${el[0]} ${el[2]} | Mass: ${el[3]} | Ion: ${el[4]} | EN: ${el[5]}`;
+        cell.innerHTML = `<span class="anum">${el[0]}</span><span class="sym">${el[1]}</span><span class="mass">${el[3]}</span><span class="ion">${el[4]}</span><span class="name">${el[2]}</span>`;
+        grid.appendChild(cell);
+      } else {
+        const blank = document.createElement('div');
+        blank.className = 'pt-cell pt-empty';
+        grid.appendChild(blank);
+      }
+    }
+  }
+  // Fix grid template for 10 rows
+  grid.style.gridTemplateRows = 'repeat(7, 56px) 8px 56px 56px';
+}
+
+// ── Toggle sections ──────────────────────────────────────────────
+function toggle(header) {
+  header.classList.toggle('open');
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+  if (body.classList.contains('open')) body.style.display = 'block';
+  else body.style.display = 'none';
+}
+
+// ── Scroll to section + open it ──────────────────────────────────
+function navTo(id, btn) {
+  const sec = document.getElementById(id);
+  if (!sec) return;
+  const header = sec.querySelector('.section-header');
+  const body = sec.querySelector('.section-body');
+  if (!body.classList.contains('open')) {
+    header.classList.add('open');
+    body.classList.add('open');
+    body.style.display = 'block';
+  }
+  setTimeout(() => sec.scrollIntoView({behavior:'smooth', block:'start'}), 50);
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
+
+// ── Table filter ─────────────────────────────────────────────────
+function filterTable(tableId, query) {
+  const rows = document.querySelectorAll(`#${tableId} tbody tr`);
+  const q = query.toLowerCase();
+  rows.forEach(row => {
+    row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+// ── Global search ────────────────────────────────────────────────
+function doSearch(query) {
+  if (!query) {
+    document.querySelectorAll('mark').forEach(m => {
+      m.outerHTML = m.textContent;
+    });
+    return;
+  }
+}
+
+// ── Init ─────────────────────────────────────────────────────────
+buildPeriodicTable();
+
+// Open all sections by default on load for easy browsing
+// (periodic table is already open)
+</script>
+</body>
+</html>
