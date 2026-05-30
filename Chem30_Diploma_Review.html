@@ -410,15 +410,37 @@ nav {
 }
 
 .outcome-toggle .ot-check {
-  margin-left: auto; width: 20px; height: 20px;
-  border: 2px solid var(--border); border-radius: 4px;
+  margin-left: auto; width: 26px; height: 26px;
+  border: 2px solid var(--border); border-radius: 6px;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0; cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
+  background: #fff;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
+.outcome-toggle .ot-check:hover { border-color: var(--green-light); transform: scale(1.1); box-shadow: 0 2px 8px rgba(64,145,108,0.25); }
+.outcome-toggle .ot-check.checked { background: var(--green-light); border-color: var(--green-light); box-shadow: 0 2px 8px rgba(64,145,108,0.35); }
+.outcome-toggle .ot-check.checked::after { content: '✓'; color: #fff; font-size: 0.85rem; font-weight: 800; }
 
-.outcome-toggle .ot-check.checked { background: var(--green-light); border-color: var(--green-light); }
-.outcome-toggle .ot-check.checked::after { content: '✓'; color: #fff; font-size: 0.75rem; font-weight: 700; }
+/* Checked outcome row styling */
+.outcome-item.completed .outcome-toggle { background: #f0faf4; }
+.outcome-item.completed .outcome-toggle .ot-code { background: #c6ecd5; color: var(--green-dark); }
+.outcome-item.completed { border-color: rgba(64,145,108,0.35); }
+
+/* Progress count label */
+.prog-count { font-size: 0.75rem; color: var(--text-light); margin-left: 8px; white-space: nowrap; }
+
+/* Unit complete banner */
+.unit-complete-banner {
+  display: none; align-items: center; gap: 10px;
+  background: linear-gradient(135deg, #d8f3dc, #b7e4c7);
+  border: 1.5px solid rgba(64,145,108,0.4);
+  border-radius: 10px; padding: 10px 16px; margin-top: 10px;
+  font-size: 0.85rem; font-weight: 600; color: var(--green-dark);
+  animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+.unit-complete-banner.show { display: flex; }
+@keyframes popIn { from{opacity:0;transform:scale(0.85);} to{opacity:1;transform:scale(1);} }
 
 .outcome-toggle .ot-arrow { color: var(--text-light); margin-right: 4px; transition: transform 0.2s; }
 .outcome-item.open .ot-arrow { transform: rotate(90deg); }
@@ -673,9 +695,10 @@ footer strong { color: var(--amber); }
     <div class="prog-row">
       <span class="prog-label">Outcomes completed</span>
       <div class="prog-track"><div class="prog-fill" id="prog-a" style="width:0%;background:var(--green-light);"></div></div>
-      <span class="prog-pct" id="pct-a">0%</span>
+      <span class="prog-pct" id="pct-a">0%</span><span class="prog-count" id="cnt-a"></span>
     </div>
   </div>
+  <div class="unit-complete-banner" id="banner-a">🎉 Unit A — All outcomes reviewed!</div>
 </div>
 
     <div class="tabs" id="tabs-a">
@@ -775,9 +798,10 @@ footer strong { color: var(--amber); }
     <div class="prog-row">
       <span class="prog-label">Outcomes completed</span>
       <div class="prog-track"><div class="prog-fill" id="prog-b" style="width:0%;background:var(--green-light);"></div></div>
-      <span class="prog-pct" id="pct-b">0%</span>
+      <span class="prog-pct" id="pct-b">0%</span><span class="prog-count" id="cnt-b"></span>
     </div>
   </div>
+  <div class="unit-complete-banner" id="banner-b">🎉 Unit B — All outcomes reviewed!</div>
 </div>
 
     <div class="tabs" id="tabs-b">
@@ -877,9 +901,10 @@ footer strong { color: var(--amber); }
     <div class="prog-row">
       <span class="prog-label">Outcomes completed</span>
       <div class="prog-track"><div class="prog-fill" id="prog-c" style="width:0%;background:var(--green-light);"></div></div>
-      <span class="prog-pct" id="pct-c">0%</span>
+      <span class="prog-pct" id="pct-c">0%</span><span class="prog-count" id="cnt-c"></span>
     </div>
   </div>
+  <div class="unit-complete-banner" id="banner-c">🎉 Unit C — All outcomes reviewed!</div>
 </div>
 
     <div class="tabs" id="tabs-c">
@@ -972,9 +997,10 @@ footer strong { color: var(--amber); }
     <div class="prog-row">
       <span class="prog-label">Outcomes completed</span>
       <div class="prog-track"><div class="prog-fill" id="prog-d" style="width:0%;background:var(--green-light);"></div></div>
-      <span class="prog-pct" id="pct-d">0%</span>
+      <span class="prog-pct" id="pct-d">0%</span><span class="prog-count" id="cnt-d"></span>
     </div>
   </div>
+  <div class="unit-complete-banner" id="banner-d">🎉 Unit D — All outcomes reviewed!</div>
 </div>
 
     <div class="tabs" id="tabs-d">
@@ -1274,6 +1300,7 @@ function restoreProgress() {
     if (item && checked) {
       const check = item.querySelector('.ot-check');
       if (check) check.classList.add('checked');
+      item.classList.add('completed');
     }
   });
   updateProgress();
@@ -1282,10 +1309,10 @@ function restoreProgress() {
 // ── Progress bars ─────────────────────────────────────
 function updateProgress() {
   const groups = [
-    { ids: ['a1','a2','a3','a4','a5','a6'], bar: 'prog-a', pct: 'pct-a' },
-    { ids: ['b1','b2','b3','b4','b5','b6'], bar: 'prog-b', pct: 'pct-b' },
-    { ids: ['c1','c2','c3','c4','c5'],      bar: 'prog-c', pct: 'pct-c' },
-    { ids: ['d1','d2','d3','d4','d5','d6'], bar: 'prog-d', pct: 'pct-d' },
+    { ids: ['a1','a2','a3','a4','a5','a6'], bar: 'prog-a', pct: 'pct-a', cnt: 'cnt-a', banner: 'banner-a' },
+    { ids: ['b1','b2','b3','b4','b5','b6'], bar: 'prog-b', pct: 'pct-b', cnt: 'cnt-b', banner: 'banner-b' },
+    { ids: ['c1','c2','c3','c4','c5'],      bar: 'prog-c', pct: 'pct-c', cnt: 'cnt-c', banner: 'banner-c' },
+    { ids: ['d1','d2','d3','d4','d5','d6'], bar: 'prog-d', pct: 'pct-d', cnt: 'cnt-d', banner: 'banner-d' },
   ];
   groups.forEach(g => {
     const total = g.ids.length;
@@ -1296,8 +1323,19 @@ function updateProgress() {
     const pct = Math.round((done / total) * 100);
     const bar = document.getElementById(g.bar);
     const pctEl = document.getElementById(g.pct);
+    const cntEl = document.getElementById(g.cnt);
+    const bannerEl = document.getElementById(g.banner);
     if (bar) bar.style.width = pct + '%';
     if (pctEl) pctEl.textContent = pct + '%';
+    if (cntEl) cntEl.textContent = done + ' of ' + total + ' complete';
+    if (bannerEl) {
+      const wasShown = bannerEl.classList.contains('show');
+      bannerEl.classList.toggle('show', done === total);
+      if (done === total && !wasShown) {
+        bannerEl.style.animation = 'none';
+        requestAnimationFrame(() => { bannerEl.style.animation = ''; });
+      }
+    }
   });
 }
 
