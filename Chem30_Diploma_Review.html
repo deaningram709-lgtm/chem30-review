@@ -1283,9 +1283,10 @@ function toggleOutcome(id) {
 // ── Outcome checkboxes ────────────────────────────────
 function checkOutcome(event, id) {
   event.stopPropagation();
-  const check = event.currentTarget;
+  const item = document.querySelector('[data-id="' + id + '"]');
+  const check = item ? item.querySelector('.ot-check') : event.currentTarget;
   check.classList.toggle('checked');
-  // Save to localStorage
+  if (item) item.classList.toggle('completed', check.classList.contains('checked'));
   const saved = JSON.parse(localStorage.getItem('chem30progress') || '{}');
   saved[id] = check.classList.contains('checked');
   localStorage.setItem('chem30progress', JSON.stringify(saved));
