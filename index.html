@@ -410,17 +410,28 @@ nav {
 }
 
 .outcome-toggle .ot-check {
-  margin-left: auto; width: 26px; height: 26px;
-  border: 2px solid var(--border); border-radius: 6px;
+  margin-left: auto; width: 34px; height: 34px;
+  border: 2.5px solid #bbb; border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0; cursor: pointer;
   background: #fff;
   transition: background 0.2s, border-color 0.2s, transform 0.15s, box-shadow 0.15s;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.12);
 }
-.outcome-toggle .ot-check:hover { border-color: var(--green-light); transform: scale(1.1); box-shadow: 0 2px 8px rgba(64,145,108,0.25); }
-.outcome-toggle .ot-check.checked { background: var(--green-light); border-color: var(--green-light); box-shadow: 0 2px 8px rgba(64,145,108,0.35); }
-.outcome-toggle .ot-check.checked::after { content: '✓'; color: #fff; font-size: 0.85rem; font-weight: 800; }
+.ot-check-wrap {
+  margin-left: auto; display: flex; align-items: center; gap: 7px; flex-shrink: 0;
+}
+.ot-check-label {
+  font-size: 0.72rem; font-weight: 700; color: #aaa;
+  white-space: nowrap; pointer-events: none;
+  letter-spacing: 0.02em; transition: color 0.2s;
+}
+.ot-check.checked ~ .ot-check-label, .ot-check-wrap.done .ot-check-label { color: var(--green-light); }
+.outcome-toggle .ot-check:hover { border-color: var(--green-light); transform: scale(1.08); box-shadow: 0 2px 10px rgba(64,145,108,0.3); background: #f0faf4; }
+.outcome-toggle .ot-check.checked { background: var(--green-light); border-color: var(--green-light); box-shadow: 0 2px 8px rgba(64,145,108,0.4); }
+.outcome-toggle .ot-check.checked::after { content: '✓'; color: #fff; font-size: 1rem; font-weight: 900; }
+.outcome-toggle .ot-check::before { content: '○'; font-size: 0.8rem; color: var(--text-light); line-height: 1; }
+.outcome-toggle .ot-check.checked::before { content: ''; }
 
 /* Checked outcome row styling */
 .outcome-item.completed .outcome-toggle { background: #f0faf4; }
@@ -713,37 +724,37 @@ footer strong { color: var(--amber); }
       <div class="outcomes-list"><div class="outcome-item" data-id="a1">
   <button class="outcome-toggle" onclick="toggleOutcome('a1')">
     <span class="ot-arrow">▶</span><span class="ot-code">A1</span> Explain the concept of enthalpy and classify reactions as exothermic or endothermic
-    <span class="ot-check" onclick="checkOutcome(event,'a1')"></span>
+    <span class="ot-check-wrap" id="wrap-a1"><span class="ot-check" onclick="checkOutcome(event,'a1')"></span><span class="ot-check-label">Done</span></span>
   </button>
   <div class="outcome-body"><ul><li>Distinguish between exothermic (ΔH < 0, releases heat) and endothermic (ΔH > 0, absorbs heat) reactions</li><li>Explain how enthalpy change (ΔH) relates to energy stored in chemical bonds</li><li>Draw and interpret potential energy diagrams labeling reactants, products, ΔH, and Ea</li><li>Identify the sign of ΔH from a reaction profile</li></ul></div>
 </div><div class="outcome-item" data-id="a2">
   <button class="outcome-toggle" onclick="toggleOutcome('a2')">
     <span class="ot-arrow">▶</span><span class="ot-code">A2</span> Apply calorimetry to calculate heat transfer in chemical and physical processes
-    <span class="ot-check" onclick="checkOutcome(event,'a2')"></span>
+    <span class="ot-check-wrap" id="wrap-a2"><span class="ot-check" onclick="checkOutcome(event,'a2')"></span><span class="ot-check-label">Done</span></span>
   </button>
   <div class="outcome-body"><ul><li>Use q = mcΔT to calculate heat gained or lost by water and solution calorimeters</li><li>Apply q = nΔH to relate molar enthalpy to measurable heat</li><li>Account for heat of solution, neutralization, and combustion in calorimetry problems</li><li>Identify sources of error in calorimetry experiments</li></ul></div>
 </div><div class="outcome-item" data-id="a3">
   <button class="outcome-toggle" onclick="toggleOutcome('a3')">
     <span class="ot-arrow">▶</span><span class="ot-code">A3</span> Apply Hess's Law to calculate enthalpy changes for reactions
-    <span class="ot-check" onclick="checkOutcome(event,'a3')"></span>
+    <span class="ot-check-wrap" id="wrap-a3"><span class="ot-check" onclick="checkOutcome(event,'a3')"></span><span class="ot-check-label">Done</span></span>
   </button>
   <div class="outcome-body"><ul><li>State Hess's Law: ΔH is path-independent and depends only on initial and final states</li><li>Combine two or more thermochemical equations (multiplying, reversing, adding) to find a target ΔH</li><li>Use standard enthalpies of formation (ΔH°f) with the formula ΔH°rxn = ΣΔH°f(products) − ΣΔH°f(reactants)</li><li>Solve multi-step Hess's Law problems with correct sign conventions</li></ul></div>
 </div><div class="outcome-item" data-id="a4">
   <button class="outcome-toggle" onclick="toggleOutcome('a4')">
     <span class="ot-arrow">▶</span><span class="ot-code">A4</span> Estimate enthalpy change using bond energies
-    <span class="ot-check" onclick="checkOutcome(event,'a4')"></span>
+    <span class="ot-check-wrap" id="wrap-a4"><span class="ot-check" onclick="checkOutcome(event,'a4')"></span><span class="ot-check-label">Done</span></span>
   </button>
   <div class="outcome-body"><ul><li>Use average bond energies: ΔH ≈ Σ(bonds broken) − Σ(bonds formed)</li><li>Recognize that bond breaking is endothermic and bond forming is exothermic</li><li>Calculate ΔH estimates from structural formulas using bond energy tables</li><li>Compare bond energy estimates to experimental values and explain discrepancies</li></ul></div>
 </div><div class="outcome-item" data-id="a5">
   <button class="outcome-toggle" onclick="toggleOutcome('a5')">
     <span class="ot-arrow">▶</span><span class="ot-code">A5</span> Explain activation energy, catalysis, and reaction energy diagrams
-    <span class="ot-check" onclick="checkOutcome(event,'a5')"></span>
+    <span class="ot-check-wrap" id="wrap-a5"><span class="ot-check" onclick="checkOutcome(event,'a5')"></span><span class="ot-check-label">Done</span></span>
   </button>
   <div class="outcome-body"><ul><li>Define activation energy (Ea) and explain its role in reaction rate</li><li>Describe how catalysts lower Ea without changing ΔH</li><li>Compare catalyzed vs. uncatalyzed reaction profiles on energy diagrams</li><li>Identify the activated complex (transition state) on a potential energy diagram</li></ul></div>
 </div><div class="outcome-item" data-id="a6">
   <button class="outcome-toggle" onclick="toggleOutcome('a6')">
     <span class="ot-arrow">▶</span><span class="ot-code">A6</span> Apply entropy and Gibbs free energy to predict reaction spontaneity
-    <span class="ot-check" onclick="checkOutcome(event,'a6')"></span>
+    <span class="ot-check-wrap" id="wrap-a6"><span class="ot-check" onclick="checkOutcome(event,'a6')"></span><span class="ot-check-label">Done</span></span>
   </button>
   <div class="outcome-body"><ul><li>Define entropy (S) as a measure of disorder; predict whether ΔS is positive or negative for a reaction</li><li>Apply ΔG = ΔH − TΔS to determine spontaneity (ΔG < 0 = spontaneous)</li><li>Predict when a reaction is spontaneous based on signs of ΔH and ΔS</li><li>Explain how temperature affects spontaneity when ΔH and ΔS have the same sign</li></ul></div>
 </div></div>
@@ -816,37 +827,37 @@ footer strong { color: var(--amber); }
       <div class="outcomes-list"><div class="outcome-item" data-id="b1">
   <button class="outcome-toggle" onclick="toggleOutcome('b1')">
     <span class="ot-arrow">▶</span><span class="ot-code">B1</span> Assign oxidation numbers and identify oxidation and reduction in redox reactions
-    <span class="ot-check" onclick="checkOutcome(event,'b1')"></span>
+    <span class="ot-check-wrap" id="wrap-b1"><span class="ot-check" onclick="checkOutcome(event,'b1')"></span><span class="ot-check-label">Done</span></span>
   </button>
   <div class="outcome-body"><ul><li>Assign oxidation numbers using the rules (free element = 0, H = +1, O = −2, etc.)</li><li>Identify which species is oxidized (loses electrons, ox. no. increases) and which is reduced (gains electrons)</li><li>Define oxidizing agent (gets reduced) and reducing agent (gets oxidized)</li><li>Write and balance half-reactions for oxidation and reduction</li></ul></div>
 </div><div class="outcome-item" data-id="b2">
   <button class="outcome-toggle" onclick="toggleOutcome('b2')">
     <span class="ot-arrow">▶</span><span class="ot-code">B2</span> Balance redox equations using the half-reaction method
-    <span class="ot-check" onclick="checkOutcome(event,'b2')"></span>
+    <span class="ot-check-wrap" id="wrap-b2"><span class="ot-check" onclick="checkOutcome(event,'b2')"></span><span class="ot-check-label">Done</span></span>
   </button>
   <div class="outcome-body"><ul><li>Split into oxidation and reduction half-reactions</li><li>Balance atoms (mass balance: H₂O for O, H⁺ for H in acidic; OH⁻ and H₂O in basic)</li><li>Balance charge by adding electrons, then equalize electron count before combining</li><li>Apply to both acidic and basic solution conditions</li></ul></div>
 </div><div class="outcome-item" data-id="b3">
   <button class="outcome-toggle" onclick="toggleOutcome('b3')">
     <span class="ot-arrow">▶</span><span class="ot-code">B3</span> Predict redox reaction spontaneity using the activity series and standard reduction potentials
-    <span class="ot-check" onclick="checkOutcome(event,'b3')"></span>
+    <span class="ot-check-wrap" id="wrap-b3"><span class="ot-check" onclick="checkOutcome(event,'b3')"></span><span class="ot-check-label">Done</span></span>
   </button>
   <div class="outcome-body"><ul><li>Use the activity series to predict whether a metal will displace another from solution</li><li>Use the standard reduction potential table: reactions are spontaneous when E°cell > 0</li><li>Calculate E°cell = E°cathode − E°anode</li><li>Identify stronger/weaker oxidizing and reducing agents from the table</li></ul></div>
 </div><div class="outcome-item" data-id="b4">
   <button class="outcome-toggle" onclick="toggleOutcome('b4')">
     <span class="ot-arrow">▶</span><span class="ot-code">B4</span> Explain the operation of voltaic (galvanic) and electrolytic cells
-    <span class="ot-check" onclick="checkOutcome(event,'b4')"></span>
+    <span class="ot-check-wrap" id="wrap-b4"><span class="ot-check" onclick="checkOutcome(event,'b4')"></span><span class="ot-check-label">Done</span></span>
   </button>
   <div class="outcome-body"><ul><li>Describe voltaic cell components: anode (oxidation, −), cathode (reduction, +), salt bridge, external circuit</li><li>Distinguish voltaic cells (spontaneous, generates electricity) from electrolytic cells (non-spontaneous, requires electricity)</li><li>Write cell notation: anode | anode soln || cathode soln | cathode</li><li>Identify electrode reactions, ion flow direction, and electron flow in both cell types</li></ul></div>
 </div><div class="outcome-item" data-id="b5">
   <button class="outcome-toggle" onclick="toggleOutcome('b5')">
     <span class="ot-arrow">▶</span><span class="ot-code">B5</span> Apply Faraday's Law to electrochemical stoichiometry calculations
-    <span class="ot-check" onclick="checkOutcome(event,'b5')"></span>
+    <span class="ot-check-wrap" id="wrap-b5"><span class="ot-check" onclick="checkOutcome(event,'b5')"></span><span class="ot-check-label">Done</span></span>
   </button>
   <div class="outcome-body"><ul><li>Know Faraday's constant: F = 96 485 C/mol e⁻</li><li>Relate charge (Q = It) to moles of electrons: n(e⁻) = Q/F</li><li>Convert moles of electrons to moles and mass of substance deposited or consumed</li><li>Solve multi-step electrolysis problems involving current, time, and mass</li></ul></div>
 </div><div class="outcome-item" data-id="b6">
   <button class="outcome-toggle" onclick="toggleOutcome('b6')">
     <span class="ot-arrow">▶</span><span class="ot-code">B6</span> Perform and interpret redox titrations
-    <span class="ot-check" onclick="checkOutcome(event,'b6')"></span>
+    <span class="ot-check-wrap" id="wrap-b6"><span class="ot-check" onclick="checkOutcome(event,'b6')"></span><span class="ot-check-label">Done</span></span>
   </button>
   <div class="outcome-body"><ul><li>Identify redox titrations as quantitative analysis based on electron transfer</li><li>Calculate moles of analyte from titrant volume, concentration, and mole ratio from half-reactions</li><li>Identify common titrants (KMnO₄, K₂Cr₂O₇) and their colour changes as indicators</li><li>Apply stoichiometry to determine concentration or purity from titration data</li></ul></div>
 </div></div>
@@ -919,31 +930,31 @@ footer strong { color: var(--amber); }
       <div class="outcomes-list"><div class="outcome-item" data-id="c1">
   <button class="outcome-toggle" onclick="toggleOutcome('c1')">
     <span class="ot-arrow">▶</span><span class="ot-code">C1</span> Classify organic compounds and apply IUPAC nomenclature for hydrocarbons
-    <span class="ot-check" onclick="checkOutcome(event,'c1')"></span>
+    <span class="ot-check-wrap" id="wrap-c1"><span class="ot-check" onclick="checkOutcome(event,'c1')"></span><span class="ot-check-label">Done</span></span>
   </button>
   <div class="outcome-body"><ul><li>Distinguish aliphatic (alkanes, alkenes, alkynes, cyclic) from aromatic (benzene ring) hydrocarbons</li><li>Apply IUPAC rules: identify longest carbon chain, number from closest branch, name substituents alphabetically</li><li>Name and draw structural formulas for alkanes (C1–C10), alkenes, alkynes, and cyclic hydrocarbons</li><li>Classify as saturated (alkanes, cycloalkanes) or unsaturated (alkenes, alkynes, aromatics)</li></ul></div>
 </div><div class="outcome-item" data-id="c2">
   <button class="outcome-toggle" onclick="toggleOutcome('c2')">
     <span class="ot-arrow">▶</span><span class="ot-code">C2</span> Identify and name functional groups and apply IUPAC nomenclature to organic families
-    <span class="ot-check" onclick="checkOutcome(event,'c2')"></span>
+    <span class="ot-check-wrap" id="wrap-c2"><span class="ot-check" onclick="checkOutcome(event,'c2')"></span><span class="ot-check-label">Done</span></span>
   </button>
   <div class="outcome-body"><ul><li>Identify functional groups: −OH (alcohol), −COOH (carboxylic acid), −COO− (ester), −NH₂ (amine), C=O (aldehyde/ketone), −X (halide)</li><li>Apply IUPAC naming rules with correct suffixes (−ol, −al, −one, −oic acid, −amine)</li><li>Distinguish primary, secondary, and tertiary alcohols and amines</li><li>Draw structural and condensed formulas for each organic family</li></ul></div>
 </div><div class="outcome-item" data-id="c3">
   <button class="outcome-toggle" onclick="toggleOutcome('c3')">
     <span class="ot-arrow">▶</span><span class="ot-code">C3</span> Predict physical properties based on intermolecular forces
-    <span class="ot-check" onclick="checkOutcome(event,'c3')"></span>
+    <span class="ot-check-wrap" id="wrap-c3"><span class="ot-check" onclick="checkOutcome(event,'c3')"></span><span class="ot-check-label">Done</span></span>
   </button>
   <div class="outcome-body"><ul><li>Explain how molecular structure determines IMFs: London dispersion, dipole-dipole, hydrogen bonding</li><li>Predict relative boiling points and solubility based on molecular mass, polarity, and functional groups</li><li>Apply "like dissolves like" to predict solubility of organic compounds in polar and nonpolar solvents</li><li>Explain industrial separations (fractional distillation, solvent extraction) using IMF principles</li></ul></div>
 </div><div class="outcome-item" data-id="c4">
   <button class="outcome-toggle" onclick="toggleOutcome('c4')">
     <span class="ot-arrow">▶</span><span class="ot-code">C4</span> Identify and predict organic reaction types
-    <span class="ot-check" onclick="checkOutcome(event,'c4')"></span>
+    <span class="ot-check-wrap" id="wrap-c4"><span class="ot-check" onclick="checkOutcome(event,'c4')"></span><span class="ot-check-label">Done</span></span>
   </button>
   <div class="outcome-body"><ul><li>Identify addition (alkene + X₂ or HX → product), substitution (alkane + halogen → halide + HX), and elimination reactions</li><li>Predict products of esterification (alcohol + carboxylic acid ⇌ ester + water) and saponification (ester + NaOH)</li><li>Identify combustion products (complete: CO₂ + H₂O; incomplete: CO + soot)</li><li>Classify addition and condensation polymerization; identify monomer and repeat unit from polymer</li></ul></div>
 </div><div class="outcome-item" data-id="c5">
   <button class="outcome-toggle" onclick="toggleOutcome('c5')">
     <span class="ot-arrow">▶</span><span class="ot-code">C5</span> Connect organic chemistry to societal and biological applications
-    <span class="ot-check" onclick="checkOutcome(event,'c5')"></span>
+    <span class="ot-check-wrap" id="wrap-c5"><span class="ot-check" onclick="checkOutcome(event,'c5')"></span><span class="ot-check-label">Done</span></span>
   </button>
   <div class="outcome-body"><ul><li>Explain how esters give fruits and perfumes their characteristic scents</li><li>Describe the role of polymers in everyday materials (plastics, nylons, polyesters)</li><li>Explain biomolecule classification: carbohydrates (sugars, starch, cellulose), proteins (amino acids), lipids (fats/oils/phospholipids)</li><li>Connect organic reactions to industrial processes (petroleum refining, soap manufacturing, pharmaceutical synthesis)</li></ul></div>
 </div></div>
@@ -1015,37 +1026,37 @@ footer strong { color: var(--amber); }
       <div class="outcomes-list"><div class="outcome-item" data-id="d1">
   <button class="outcome-toggle" onclick="toggleOutcome('d1')">
     <span class="ot-arrow">▶</span><span class="ot-code">D1</span> Explain the concept of dynamic chemical equilibrium
-    <span class="ot-check" onclick="checkOutcome(event,'d1')"></span>
+    <span class="ot-check-wrap" id="wrap-d1"><span class="ot-check" onclick="checkOutcome(event,'d1')"></span><span class="ot-check-label">Done</span></span>
   </button>
   <div class="outcome-body"><ul><li>Define dynamic equilibrium: forward and reverse rates are equal; concentrations are constant but not zero</li><li>State the conditions required for equilibrium: closed system, constant temperature</li><li>Write equilibrium law expressions (Keq) from balanced equations; exclude pure solids and liquids</li><li>Interpret large Keq (favours products) vs. small Keq (favours reactants)</li></ul></div>
 </div><div class="outcome-item" data-id="d2">
   <button class="outcome-toggle" onclick="toggleOutcome('d2')">
     <span class="ot-arrow">▶</span><span class="ot-code">D2</span> Apply Le Châtelier's Principle to predict equilibrium shifts
-    <span class="ot-check" onclick="checkOutcome(event,'d2')"></span>
+    <span class="ot-check-wrap" id="wrap-d2"><span class="ot-check" onclick="checkOutcome(event,'d2')"></span><span class="ot-check-label">Done</span></span>
   </button>
   <div class="outcome-body"><ul><li>State Le Châtelier's Principle: a system at equilibrium responds to stress by shifting to minimize the disturbance</li><li>Predict shifts when concentration, pressure (for gases), or temperature changes</li><li>Explain why adding an inert gas or changing volume at constant pressure affects (or doesn't affect) equilibrium</li><li>Apply to industrial processes (Haber process for ammonia, Contact process for sulfuric acid)</li></ul></div>
 </div><div class="outcome-item" data-id="d3">
   <button class="outcome-toggle" onclick="toggleOutcome('d3')">
     <span class="ot-arrow">▶</span><span class="ot-code">D3</span> Apply Brønsted-Lowry acid-base theory and identify conjugate pairs
-    <span class="ot-check" onclick="checkOutcome(event,'d3')"></span>
+    <span class="ot-check-wrap" id="wrap-d3"><span class="ot-check" onclick="checkOutcome(event,'d3')"></span><span class="ot-check-label">Done</span></span>
   </button>
   <div class="outcome-body"><ul><li>Define Brønsted-Lowry acids (proton donors) and bases (proton acceptors)</li><li>Identify conjugate acid-base pairs in any proton transfer reaction</li><li>Identify amphiprotic species (can act as both acid and base, e.g., HCO₃⁻, H₂O)</li><li>Predict the direction of acid-base equilibrium using relative acid/base strengths</li></ul></div>
 </div><div class="outcome-item" data-id="d4">
   <button class="outcome-toggle" onclick="toggleOutcome('d4')">
     <span class="ot-arrow">▶</span><span class="ot-code">D4</span> Perform pH, pOH, Ka, Kb, and Kw calculations
-    <span class="ot-check" onclick="checkOutcome(event,'d4')"></span>
+    <span class="ot-check-wrap" id="wrap-d4"><span class="ot-check" onclick="checkOutcome(event,'d4')"></span><span class="ot-check-label">Done</span></span>
   </button>
   <div class="outcome-body"><ul><li>Calculate pH = −log[H₃O⁺] and pOH = −log[OH⁻]; relate via pH + pOH = 14 (at 25°C)</li><li>Use Kw = [H⁺][OH⁻] = 1.0 × 10⁻¹⁴ to find [H⁺] or [OH⁻]</li><li>Calculate Ka or Kb from equilibrium concentrations; use ICE tables for weak acid/base equilibria</li><li>Relate Ka and Kb for a conjugate pair: Ka × Kb = Kw</li></ul></div>
 </div><div class="outcome-item" data-id="d5">
   <button class="outcome-toggle" onclick="toggleOutcome('d5')">
     <span class="ot-arrow">▶</span><span class="ot-code">D5</span> Explain buffer systems and apply buffer calculations
-    <span class="ot-check" onclick="checkOutcome(event,'d5')"></span>
+    <span class="ot-check-wrap" id="wrap-d5"><span class="ot-check" onclick="checkOutcome(event,'d5')"></span><span class="ot-check-label">Done</span></span>
   </button>
   <div class="outcome-body"><ul><li>Define a buffer as a solution that resists pH change (weak acid + its conjugate base, or vice versa)</li><li>Apply the Henderson-Hasselbalch equation: pH = pKa + log([A⁻]/[HA])</li><li>Predict how adding strong acid or base shifts a buffer equilibrium</li><li>Give biological examples of buffers (blood: H₂CO₃/HCO₃⁻ system)</li></ul></div>
 </div><div class="outcome-item" data-id="d6">
   <button class="outcome-toggle" onclick="toggleOutcome('d6')">
     <span class="ot-arrow">▶</span><span class="ot-code">D6</span> Analyze acid-base titrations and interpret titration curves
-    <span class="ot-check" onclick="checkOutcome(event,'d6')"></span>
+    <span class="ot-check-wrap" id="wrap-d6"><span class="ot-check" onclick="checkOutcome(event,'d6')"></span><span class="ot-check-label">Done</span></span>
   </button>
   <div class="outcome-body"><ul><li>Identify equivalence point, half-equivalence point, and buffer region on a titration curve</li><li>Select appropriate indicators based on the pH range of the equivalence point</li><li>Calculate pH before, at, and after the equivalence point in strong acid-strong base titrations</li><li>Explain why weak acid-strong base titrations have equivalence points above pH 7</li></ul></div>
 </div></div>
@@ -1285,10 +1296,15 @@ function checkOutcome(event, id) {
   event.stopPropagation();
   const item = document.querySelector('[data-id="' + id + '"]');
   const check = item ? item.querySelector('.ot-check') : event.currentTarget;
+  const wrap = item ? item.querySelector('.ot-check-wrap') : null;
+  const label = item ? item.querySelector('.ot-check-label') : null;
   check.classList.toggle('checked');
-  if (item) item.classList.toggle('completed', check.classList.contains('checked'));
+  const done = check.classList.contains('checked');
+  if (item) item.classList.toggle('completed', done);
+  if (wrap) wrap.classList.toggle('done', done);
+  if (label) label.textContent = done ? 'Done ✓' : 'Done';
   const saved = JSON.parse(localStorage.getItem('chem30progress') || '{}');
-  saved[id] = check.classList.contains('checked');
+  saved[id] = done;
   localStorage.setItem('chem30progress', JSON.stringify(saved));
   updateProgress();
 }
@@ -1302,6 +1318,10 @@ function restoreProgress() {
       const check = item.querySelector('.ot-check');
       if (check) check.classList.add('checked');
       item.classList.add('completed');
+      const wrap = item.querySelector('.ot-check-wrap');
+      const label = item.querySelector('.ot-check-label');
+      if (wrap) wrap.classList.add('done');
+      if (label) label.textContent = 'Done ✓';
     }
   });
   updateProgress();
