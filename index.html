@@ -642,15 +642,15 @@ footer strong { color: var(--amber); }
     <p>This hub brings everything you need for the Chemistry 30 Diploma Exam into one place — structured notes, key concepts, practice questions, and the best online study tools.</p>
     <div class="hero-stats">
       <div class="stat-card"><div class="num">4</div><div class="lbl">Units</div></div>
-      <div class="stat-card"><div class="num">25%</div><div class="lbl">Each Unit</div></div>
+      <div class="stat-card"><div class="num">20–30%</div><div class="lbl">Per Unit</div></div>
       <div class="stat-card"><div class="num">~2.5h</div><div class="lbl">Exam Duration</div></div>
       <div class="stat-card"><div class="num">100</div><div class="lbl">Marks Total</div></div>
     </div>
     <div class="hero-units">
-      <a href="#unit-a" class="unit-chip"><span class="chip-icon">🔥</span><div class="chip-text"><strong>Unit A</strong><span>Thermochemical Changes · 25%</span></div></a>
-      <a href="#unit-b" class="unit-chip"><span class="chip-icon">⚡</span><div class="chip-text"><strong>Unit B</strong><span>Electrochemical Changes · 25%</span></div></a>
-      <a href="#unit-c" class="unit-chip"><span class="chip-icon">🧪</span><div class="chip-text"><strong>Unit C</strong><span>Organic Compounds · 25%</span></div></a>
-      <a href="#unit-d" class="unit-chip"><span class="chip-icon">⚖️</span><div class="chip-text"><strong>Unit D</strong><span>Chemical Equilibrium · 25%</span></div></a>
+      <a href="#unit-a" class="unit-chip"><span class="chip-icon">🔥</span><div class="chip-text"><strong>Unit A</strong><span>Thermochemical Changes · 20%</span></div></a>
+      <a href="#unit-b" class="unit-chip"><span class="chip-icon">⚡</span><div class="chip-text"><strong>Unit B</strong><span>Electrochemical Changes · 30%</span></div></a>
+      <a href="#unit-c" class="unit-chip"><span class="chip-icon">🧪</span><div class="chip-text"><strong>Unit C</strong><span>Organic Compounds · 20%</span></div></a>
+      <a href="#unit-d" class="unit-chip"><span class="chip-icon">⚖️</span><div class="chip-text"><strong>Unit D</strong><span>Chemical Equilibrium · 30%</span></div></a>
     </div>
   </div>
 </section>
@@ -664,7 +664,7 @@ footer strong { color: var(--amber); }
         <h2>Thermochemical Changes</h2>
         <p>Energy transformations, calorimetry, Hess's Law, bond energies, and Gibbs free energy</p>
       </div>
-      <div class="weight-badge"><div class="pct">25%</div><div class="lbl">Diploma Weight</div></div>
+      <div class="weight-badge"><div class="pct">20%</div><div class="lbl">Diploma Weight</div></div>
     </div>
 
     <div class="progress-section">
@@ -766,7 +766,7 @@ footer strong { color: var(--amber); }
         <h2>Electrochemical Changes</h2>
         <p>Redox reactions, electrochemical cells, Faraday's Law, and quantitative electrolysis</p>
       </div>
-      <div class="weight-badge"><div class="pct">25%</div><div class="lbl">Diploma Weight</div></div>
+      <div class="weight-badge"><div class="pct">30%</div><div class="lbl">Diploma Weight</div></div>
     </div>
 
     <div class="progress-section">
@@ -868,7 +868,7 @@ footer strong { color: var(--amber); }
         <h2>Organic Compounds</h2>
         <p>IUPAC nomenclature, functional groups, reaction types, polymers, and biochemistry</p>
       </div>
-      <div class="weight-badge"><div class="pct">25%</div><div class="lbl">Diploma Weight</div></div>
+      <div class="weight-badge"><div class="pct">20%</div><div class="lbl">Diploma Weight</div></div>
     </div>
 
     <div class="progress-section">
@@ -963,7 +963,7 @@ footer strong { color: var(--amber); }
         <h2>Chemical Equilibrium</h2>
         <p>Le Châtelier's Principle, acid-base theories, pH calculations, buffers, and titrations</p>
       </div>
-      <div class="weight-badge"><div class="pct">25%</div><div class="lbl">Diploma Weight</div></div>
+      <div class="weight-badge"><div class="pct">30%</div><div class="lbl">Diploma Weight</div></div>
     </div>
 
     <div class="progress-section">
@@ -1071,7 +1071,7 @@ footer strong { color: var(--amber); }
       <span class="tip-icon">💡</span>
       <div>
         <h4>Diploma Exam Format</h4>
-        <p>The Chemistry 30 Diploma Exam is 2.5 hours. Section 1: Multiple Choice (70 marks). Section 2: Written Response (30 marks) — show all work. A <a href="chem30_data_booklet.html" target="_blank" style="color:var(--green-dark);font-weight:700;">data booklet</a> is provided. Units A–D are each worth 25%.</p>
+        <p>The Chemistry 30 Diploma Exam is 2.5 hours. Section 1: Multiple Choice (70 marks). Section 2: Written Response (30 marks) — show all work. A <a href="chem30_data_booklet.html" target="_blank" style="color:var(--green-dark);font-weight:700;">data booklet</a> is provided. Units A & C are worth 20% each; Units B & D are worth 30% each.</p>
       </div>
     </div>
 
@@ -1332,22 +1332,22 @@ function generateSchedule(days) {
   const dateRange = (start,n) => n<=1 ? fmt(start) : `${fmt(start)} – ${fmt(addD(start,n-1))}`;
 
   const UNITS = [
-    { icon:'🔥', name:'Unit A', sub:'Thermochemical Changes', anchor:'#unit-a', color:'#f44336', w:25,
+    { icon:'🔥', name:'Unit A', sub:'Thermochemical Changes', anchor:'#unit-a', color:'#f44336', w:20,
       tips: ['Master calorimetry, Hess’s Law, bond energies, and Gibbs free energy. Calculation questions are common on the diploma.',
              'Focus on calorimetry calculations, Hess’s Law, and ΔG = ΔH − TΔS.',
              'Calorimetry formula + one Hess’s Law practice problem.',
              'Quick: enthalpy signs, exo vs. endo, reaction profiles.'] },
-    { icon:'⚡', name:'Unit B', sub:'Electrochemical Changes', anchor:'#unit-b', color:'#2196f3', w:25,
+    { icon:'⚡', name:'Unit B', sub:'Electrochemical Changes', anchor:'#unit-b', color:'#2196f3', w:30,
       tips: ['Oxidation numbers, balancing redox half-reactions, activity series, galvanic vs. electrolytic cells, and Faraday’s Law calculations.',
              'Prioritize: balancing redox equations, cell notation, and Faraday’s Law.',
              'Assign oxidation numbers + balance one redox reaction.',
              'Quick: OIL RIG, activity series, cell diagram labels.'] },
-    { icon:'🧪', name:'Unit C', sub:'Organic Compounds', anchor:'#unit-c', color:'#9c27b0', w:25,
+    { icon:'🧪', name:'Unit C', sub:'Organic Compounds', anchor:'#unit-c', color:'#9c27b0', w:20,
       tips: ['IUPAC naming (including cyclic, aromatic, and functional groups), reaction types, and biomolecules.',
              'Focus on IUPAC naming, functional group identification, and reaction type recognition.',
              'Name 5 organic compounds. Identify functional groups.',
              'Quick: functional groups list + one naming practice.'] },
-    { icon:'⚖️', name:'Unit D', sub:'Chemical Equilibrium', anchor:'#unit-d', color:'#ff9800', w:25,
+    { icon:'⚖️', name:'Unit D', sub:'Chemical Equilibrium', anchor:'#unit-d', color:'#ff9800', w:30,
       tips: ['Le Châtelier’s principle, acid-base theories, pH/pOH/Ka/Kb/Kw calculations, buffers, titrations, and Ksp. Heavy calculation unit!',
              'Prioritize: pH/Ka/Kb calculations, titration curves, and Ksp.',
              'pH calculation + one Ksp problem.',
